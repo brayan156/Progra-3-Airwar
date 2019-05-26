@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 public class MainController extends Application {
@@ -23,11 +24,12 @@ public class MainController extends Application {
         Scene scene = new Scene(root);
         scene.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
             if (KeyCode.ESCAPE == event.getCode()) {gameStage.close();}});
-        gameStage.setTitle("Air War");
         gameStage.setScene(scene);
+        gameStage.initStyle(StageStyle.UNDECORATED);
         gameStage.setResizable(false);
-        gameStage.getIcons().add(new Image("/Media/battery.png"));
+        gameStage.getIcons().add(new Image("/Media/tank.png"));
         gameStage.show();
     }
+
 
 }

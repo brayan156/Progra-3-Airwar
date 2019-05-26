@@ -1,17 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="860.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interface.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="860.0" prefWidth="1100.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interface.Controller">
    <children>
-      <ImageView fx:id="batteryImageView" disable="true" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" y="800.0" AnchorPane.bottomAnchor="0.0">
-         <image>
-            <Image url="@../Media/battery.png" />
-         </image>
-      </ImageView>
-      <Rectangle fx:id="r" arcHeight="5.0" arcWidth="5.0" fill="DARKRED" height="60.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="6.0" width="60.0" y="800.0" AnchorPane.bottomAnchor="0.0" />
+      <AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="860.0" prefWidth="1000.0" style="-fx-background-color: #0f0f0f;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="800.0" fitWidth="1000.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../Media/map2.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="batteryImageView" disable="true" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" y="800.0" AnchorPane.bottomAnchor="0.0">
+               <image>
+                  <Image url="@../Media/tank.png" />
+               </image>
+            </ImageView>
+            <Rectangle fx:id="r" arcHeight="5.0" arcWidth="5.0" fill="DARKRED" height="60.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="6.0" width="60.0" y="800.0" AnchorPane.bottomAnchor="0.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1000.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="108.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Text fx:id="planecounterText1" fill="#114611" strokeType="OUTSIDE" strokeWidth="0.0" text="Stats" textAlignment="CENTER">
+                     <font>
+                        <Font name="Bauhaus 93" size="45.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Text>
+                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="100.0" spacing="7.0">
+                     <children>
+                        <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Media/helmet.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="planecounterText" fill="GREEN" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER">
+                           <font>
+                              <Font name="Bauhaus 93" size="45.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="50.0" prefWidth="100.0">
+                     <children>
+                        <ImageView fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Media/grenade.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="killcounterText" fill="#a80101" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER">
+                           <font>
+                              <Font name="Bauhaus 93" size="45.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <ProgressBar fx:id="powerProgressBar" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="175.0" progress="0.1" rotate="-90.0" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="90.0" />
+                     </VBox.margin>
+                  </ProgressBar>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

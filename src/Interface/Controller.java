@@ -2,8 +2,11 @@ package Interface;
 
 import java.io.File;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
@@ -39,10 +42,7 @@ public class Controller {
     	difficultyLevel(); //nivel de dificultad, setear tiempo de movimiento de la bateria.
     	batteryMovement(); //movimiento de la barra
     	generatePlane();
-    	generatePlane();
-    	generatePlane();
-    	generatePlane();
-    	generatePlane();
+//    	timerTask();
 	}
 
     
@@ -92,41 +92,47 @@ public class Controller {
     	return num;
     }
     
-//    public void timerTask() throws InterruptedException {
-//    	Timeline timerline = new Timeline();
-//    	KeyValue keyValue  = new KeyValue(
-//		timerline.schedule(timerTask, 1000,1000);
-//    }
+    public void timerTask() throws InterruptedException {
+    	Timer timer = new Timer();
+    	timer.schedule( new TimerTask()
+    	{
+    	    public void run()
+    	    {
+    	        System.out.println("3 Seconds Later");
+				generatePlane(searchPort());	
+
+    	    }
+    	}, 3000, 3000 //Note the second argument for repetition
+    	);
+    }
     
     //NEW THREAD
     public void generatePlane() {
     	Thread t = new Thread(new Runnable() {
     		@Override
     		public void run() {
-    			try {
     				generatePlane(searchPort());
-    			} catch (InterruptedException e) {
-    				e.printStackTrace();
-    				System.out.println("No se pudo generar el avion");
-    			}
     		}
     	});  
 	    t.start();
     }
    
     //BIRTH PLAN
-    public void generatePlane(AirPort airportBirth) throws InterruptedException{
+    public void generatePlane(AirPort airportBirth){
     	if (!airportBirth.isEmpty()) return;    	
     	//aeropuerto en que se crea manda sus posiciones.
     	Plane plane = new Plane(airportBirth.getPosx(), airportBirth.getPosy());
+//    	plane.createimg();
+//    	mapAnchorPane.getChildren().add(plane);
     	plane.draw(mapAnchorPane);
+    	System.out.println("SE DIBUJAAAAAAA");
     	airportBirth.setEmpty(true);
     	this.setPlaneText();
-    	flyPlane(plane, searchPort());
+		flyPlane(plane, searchPort());
     }
     
     //BUSCAR ATERRIZAJE
-    public AirPort searchPort() throws InterruptedException {
+    public AirPort searchPort() {
     	int x=0;
     	int y=0;
 	    x = getRandomNum(700);
@@ -138,7 +144,7 @@ public class Controller {
     }
     
     //VOLAR HACIA ZONA
-    public void flyPlane(Plane plane, AirPort zoneDestination) throws InterruptedException {
+    public void flyPlane(Plane plane, AirPort zoneDestination) {
     	zoneDestination.setEmpty(false); // setear airport a ocupado.    	
     	//movimiento
     	double destX = zoneDestination.getPosx();
@@ -148,7 +154,7 @@ public class Controller {
     	planeTransition.start();
     	//Dormir mientras avion llega
     	long duration = planeTransition.getDuration();
-    	Thread.sleep(duration*1000);
+    	sleep(duration);
     	
     	//Aterriza
     	zoneDestination.setEmpty(true);
@@ -157,9 +163,18 @@ public class Controller {
     	//Dormir mientras es tiempo de volar otra vez.
     	plane.setFlyOutTime();
     	long flyTimeOut = plane.getFlyOutTime();
-    	Thread.sleep(flyTimeOut*1000);
+		sleep(flyTimeOut);
     	flyPlane(plane, searchPort()); //BUSCAR ATERRIZAJE
     	
+    }
+    
+    public void sleep(double sleep) {
+    	try {
+			Thread.sleep((long) (sleep*1000));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+//			System.out.println("No se duerme el Thread. Error");
+		}
     }
     
     

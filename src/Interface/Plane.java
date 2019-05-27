@@ -15,7 +15,7 @@ public class Plane extends ImageView {
 		private String plane,url;
 		private boolean Alive = true;
 		private Random random = new Random();
-    
+		
 	/*Constructor*/
     public Plane(int posx, int posy) {
         super();
@@ -25,12 +25,13 @@ public class Plane extends ImageView {
         this.posy=posy;
         this.setX(this.posx);
         this.setY(this.posy);
+        this.setId(String.valueOf(Controller.planeGenerated));
         this.setFlyOutTime();
     }
     
     //crear imagen
     public void createimg(){
-    	Image img = new Image(url, 20,20, true, true);
+    	Image img = new Image(url, 40,40, true, true);
         this.setImage(img);
     }
     

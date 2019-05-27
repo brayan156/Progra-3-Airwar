@@ -26,7 +26,7 @@ public class Controller {
 
     
     //game settings
-    public static int battery_lapseSpeed, peligrosidad=0, planecounter = 0, killcounter = 0;
+    public static int battery_lapseSpeed, peligrosidad=0, planecounter = 0, killcounter = 0,planeGenerated=0;
 //	private long timerGenerator=1;
     private Random random = new Random();
 
@@ -63,6 +63,7 @@ public class Controller {
 	//ALIVETEXT
     public void setPlaneText() {
     	planecounter+=1;
+    	planeGenerated+=1;
     	planecounterText.setText(String.valueOf(planecounter));
     }
     

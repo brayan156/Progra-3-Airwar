@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 
 public class Ruta {
-	private int peso=0, peligro=0;
+	private double peso=0,peligro=0;
 	private double startX, startY, endX, endY;
 	private AirPort airport1=null, airport2=null;
 	private AirCraft aircraft1=null, aircraft2=null;
@@ -50,6 +50,7 @@ public class Ruta {
 		System.out.println("Distancia en X > "+ distanciaEnX+ "Distancia en Y > "+ distanciaEnY);
 		System.out.println("Hipotenusa > "+hipotenusa);
 		//...
+		this.peso = hipotenusa;
 		
 		//considerar zona aterrizaje
 		if (aterrizaAirCraft) {

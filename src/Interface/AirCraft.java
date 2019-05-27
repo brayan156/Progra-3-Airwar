@@ -2,13 +2,14 @@ package Interface;
 
 import javafx.scene.image.ImageView;
 
-public class AirPort extends ImageView {
+public class AirCraft extends ImageView {
 	/*Atributes*/
 	private int posx, posy;
-	private boolean empty;	
+	private boolean empty;
+	
 	
 	/*Constructor*/
-	public AirPort(int posx, int posy) {
+	public AirCraft(int posx, int posy) {
 		this.posx = posx;
 		this.posy = posy;
 		this.setEmpty(true);

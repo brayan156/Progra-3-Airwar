@@ -1,12 +1,11 @@
 package Interface;
 
 
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-
 import java.util.Random;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 public class Plane extends ImageView {
 		private static final int TimeOut = 15;
@@ -14,6 +13,7 @@ public class Plane extends ImageView {
 		double posy;
 		private int flyOutTime=0;
 		private String plane,url;
+		private boolean Alive = true;
 		private Random random = new Random();
     
 	/*Constructor*/
@@ -30,20 +30,28 @@ public class Plane extends ImageView {
     
     //crear imagen
     public void createimg(){
-    	Image img = new Image(url, 75, 75, true, true);
+    	Image img = new Image(url, 20,20, true, true);
         this.setImage(img);
     }
     
-    //dibujo avion
+    public boolean isAlive() {
+		return Alive;
+	}
+
+	public void setAlive(boolean alive) {
+		Alive = alive;
+	}
+
+	//dibujo avion
     public void draw(AnchorPane anchorPane) {
     	createimg();
     	anchorPane.getChildren().add(this);
-//    	Controller.setPlaneText();
     }
 	public void kill(AnchorPane anchorPane) throws InterruptedException {
         this.setImage(new Image("file:src/Media/explosion.PNG"));
         Thread.sleep(1000);
 		anchorPane.getChildren().remove(this);
+		Alive = false;
 	}
 	
 	public void printCoordinates() {

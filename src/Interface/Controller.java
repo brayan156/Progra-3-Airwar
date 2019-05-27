@@ -27,12 +27,14 @@ public class Controller {
     
     //game settings
     public static int battery_lapseSpeed, peligrosidad=0, planecounter = 0, killcounter = 0;
-    
+//	private long timerGenerator=1;
+    private Random random = new Random();
+
    
     
     
 	//initializer 
-    public void initialize() {
+    public void initialize() throws InterruptedException {
     	music(); //pone la musica del juego.
     	difficultyLevel(); //nivel de dificultad, setear tiempo de movimiento de la bateria.
     	batteryMovement(); //movimiento de la barra
@@ -40,8 +42,7 @@ public class Controller {
     	generatePlane();
     	generatePlane();
     	generatePlane();
-
-
+    	generatePlane();
 	}
 
     
@@ -86,10 +87,15 @@ public class Controller {
     
     //RANDOM NUM
     public int getRandomNum(double d) {
-    	Random random = new Random();
     	int num = random.nextInt((int) d)+1;
     	return num;
     }
+    
+//    public void timerTask() throws InterruptedException {
+//    	Timeline timerline = new Timeline();
+//    	KeyValue keyValue  = new KeyValue(
+//		timerline.schedule(timerTask, 1000,1000);
+//    }
     
     //NEW THREAD
     public void generatePlane() {
@@ -100,14 +106,13 @@ public class Controller {
     				generatePlane(searchPort());
     			} catch (InterruptedException e) {
     				e.printStackTrace();
-    				System.out.println("No se pudo generar el avión");
+    				System.out.println("No se pudo generar el avion");
     			}
     		}
     	});  
 	    t.start();
     }
-    
-
+   
     //BIRTH PLAN
     public void generatePlane(AirPort airportBirth) throws InterruptedException{
     	if (!airportBirth.isEmpty()) return;    	

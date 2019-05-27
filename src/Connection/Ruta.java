@@ -12,6 +12,8 @@ public class Ruta {
 	private AirPort airport1=null, airport2=null;
 	private AirCraft aircraft1=null, aircraft2=null;
 	private boolean aterrizaAirCraft=false;
+	private String ID = ""; //para saber cual ruta es.
+	
 	@FXML private Line line = new Line(startX, startY, endX, endY);
  
 	

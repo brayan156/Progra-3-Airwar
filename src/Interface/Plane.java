@@ -17,12 +17,12 @@ public class Plane extends ImageView {
 		private Random random = new Random();
 		
 	/*Constructor*/
-    public Plane(int posx, int posy) {
+    public Plane(double x, double y) {
         super();
         this.setPlane(EnumPlanes.getRandomAvion());
         this.setUrl("file:src/Media/"+plane+".PNG");
-        this.posx=posx;
-        this.posy=posy;
+        this.posx=x;
+        this.posy=y;
         this.setX(this.posx);
         this.setY(this.posy);
         this.setId(String.valueOf(Controller.planeGenerated));

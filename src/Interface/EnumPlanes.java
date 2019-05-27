@@ -3,7 +3,7 @@ package Interface;
 import java.util.Random;
 
 public enum EnumPlanes {
-    A,B,C;
+    A,B,C,D,E;
    
     private static final Random RANDOM = new Random();
     public static String getRandomAvion()  {

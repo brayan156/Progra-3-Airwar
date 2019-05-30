@@ -1,4 +1,4 @@
-package Interface;
+package GameElements;
 
 import java.util.Random;
 

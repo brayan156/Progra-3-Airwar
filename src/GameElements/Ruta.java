@@ -1,7 +1,5 @@
-package Connection;
+package GameElements;
 
-import Interface.AirCraft;
-import Interface.AirPort;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
@@ -12,7 +10,7 @@ public class Ruta {
 	private AirPort airport1=null, airport2=null;
 	private AirCraft aircraft1=null, aircraft2=null;
 	private boolean aterrizaAirCraft=false;
-	private String ID = ""; //para saber cual ruta es.
+//	private String ID = ""; //para saber cual ruta es.
 	
 	@FXML private Line line = new Line(startX, startY, endX, endY);
  
@@ -67,6 +65,7 @@ public class Ruta {
 		//considerar peligro
 		//algo ahi..
 		this.peligro = 0;
+		System.out.println("peso:"+peso+" | peligro:"+peligro);
 		//...
 	}
 	

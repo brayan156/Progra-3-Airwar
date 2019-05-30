@@ -1,18 +1,22 @@
 package Interface;
 
-import java.io.File;
-import java.util.Random;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import GameElements.AirPort;
+import GameElements.Plane;
+import Listas.Nodo;
+import Listas.NodoList;
+import Loops.TimeSchedule;
+import Loops.TimerGenerate;
+import Others.BasicFunctions;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -27,51 +31,38 @@ public class Controller {
     @FXML private Text planecounterText =  new Text(); 
     @FXML private Text  killcounterText =  new Text(); 
 
-    
     //game settings
-    public static int battery_lapseSpeed, peligrosidad=0, planecounter = 0, killcounter = 0,planeGenerated=0;
-//	private long timerGenerator=1;
-    private Random random = new Random();
+    public static int battery_lapseSpeed, peligrosidad=0, planecounter = 0, killcounter = 0;
+    public static NodoList<AirPort> airportsList = new NodoList<>();
+    public static NodoList<Plane> planesList = new NodoList<>();
 
-   
+    public TimeSchedule schGen;
+    
     
     
 	//initializer 
     public void initialize() throws InterruptedException {
-    	music(); //pone la musica del juego.
-    	difficultyLevel(); //nivel de dificultad, setear tiempo de movimiento de la bateria.
+    	BasicFunctions.music(); //pone la musica del juego.
     	batteryMovement(); //movimiento de la barra
-    	generatePlane();
-//    	timerTask();
+    	airZones();
+    	gentrTask();
 	}
 
-    
-    private static void music() {
-    	String songname = "MSTrials-Lol";
-    	if (peligrosidad == 5) { songname = "CS16-Lol";}
-    	Media hit = new Media(new File("src/Media/"+songname+".mp3").toURI().toString());
-    	MediaPlayer mediaPlayer = new MediaPlayer(hit);
-    	mediaPlayer.play();
-    }
-
-    
-	//DIFFICULTY
-    private void difficultyLevel() {
-    	battery_lapseSpeed = 5-peligrosidad;
-	}
-
+/*=====================================================================================*/  
+/*Interface Scores*/    
 	//ALIVETEXT
     public void setPlaneText() {
     	planecounter+=1;
-    	planeGenerated+=1;
     	planecounterText.setText(String.valueOf(planecounter));
     }
+    
     
 	//KILLTEXT
     public void setKillText() {
     	killcounter+=1;
     	killcounterText.setText(String.valueOf(killcounter));
     }
+    
     
 	//AIR BATTERY MOVEMENT 
     private void batteryMovement() {
@@ -80,104 +71,80 @@ public class Controller {
 		transition.setCycleCount(-1);  //-1 = INDEFINITE Cycle
 		transition.setAutoReverse(true);
 		transition.setToX(mapAnchorPane.getPrefWidth()-batteryImageView.getFitWidth());
-//		transition.setNode(r);
 		transition.setNode(batteryImageView);
 		transition.play();
 		System.out.println("Empieza Movimiento Battery");
     }
-    
-    //RANDOM NUM
-    public int getRandomNum(double d) {
-    	int num = random.nextInt((int) d)+1;
-    	return num;
-    }
-    
-    public void timerTask() throws InterruptedException {
-    	Timer timer = new Timer();
-    	timer.schedule( new TimerTask()
-    	{
-    	    public void run()
-    	    {
-    	        System.out.println("3 Seconds Later");
-				generatePlane(searchPort());	
 
-    	    }
-    	}, 3000, 3000 //Note the second argument for repetition
-    	);
+/*=====================================================================================*/
+/*Logics*/   
+    //GENERAR AIRZONES
+    private void airZones() {
+    	for(int i=0; i<8; i++) {
+    		double x  = BasicFunctions.getRandomNum(300);
+    		double y  = BasicFunctions.getRandomNum(400);
+    		AirPort airport = new AirPort(x, y);
+    		airportsList.addLast(airport);
+    		System.out.println("AirPort:"+airport.getid()+" x:"+x+" y:"+y);
+    	}
     }
     
-    //NEW THREAD
-    public void generatePlane() {
-    	Thread t = new Thread(new Runnable() {
-    		@Override
-    		public void run() {
-    				generatePlane(searchPort());
-    		}
-    	});  
-	    t.start();
+    private void gentrTask() {
+	    schGen = new TimeSchedule(new TimerGenerate(mapAnchorPane));
     }
-   
-    //BIRTH PLAN
-    public void generatePlane(AirPort airportBirth){
-    	if (!airportBirth.isEmpty()) return;    	
-    	//aeropuerto en que se crea manda sus posiciones.
-    	Plane plane = new Plane(airportBirth.getPosx(), airportBirth.getPosy());
-//    	plane.createimg();
-//    	mapAnchorPane.getChildren().add(plane);
-    	plane.draw(mapAnchorPane);
-    	System.out.println("SE DIBUJAAAAAAA");
-    	airportBirth.setEmpty(true);
-    	this.setPlaneText();
-		flyPlane(plane, searchPort());
-    }
+    
     
     //BUSCAR ATERRIZAJE
-    public AirPort searchPort() {
-    	int x=0;
-    	int y=0;
-	    x = getRandomNum(700);
-    	y = getRandomNum(500);
-    	/*obtener otro lugar donde aterrizar buscar en la lista. o como sea*/
-    	AirPort airportDestination = new AirPort(x,y);
-    	/*obtener otro lugar donde aterrizar buscar en la lista. o como sea*/
-    	return airportDestination;
+    public static AirPort searchPort() {
+    	Integer[] ports = randomPorts();
+    	for (int i=0; i<ports.length; i++) {
+    		AirPort Destination = airportsList.get(i);
+    		if (Destination.isEmpty());
+    			return Destination;
+    	}
+		return null;
+    }
+    private static Integer[] randomPorts() {
+    	Integer[] ports = new Integer[Controller.airportsList.getLargo()];
+    	for (int i=0; i<ports.length; i++) {
+    		ports[i] = BasicFunctions.getRandomNum(ports.length);
+    	}return ports;
     }
     
+/*=====================================================================================*/
     //VOLAR HACIA ZONA
-    public void flyPlane(Plane plane, AirPort zoneDestination) {
-    	zoneDestination.setEmpty(false); // setear airport a ocupado.    	
-    	//movimiento
-    	double destX = zoneDestination.getPosx();
-    	double destY = zoneDestination.getPosy();
-    	Transition planeTransition = new Transition(plane, destX, destY);
-    	
-    	planeTransition.start();
-    	//Dormir mientras avion llega
-    	long duration = planeTransition.getDuration();
-    	sleep(duration);
-    	
-    	//Aterriza
-    	zoneDestination.setEmpty(true);
-    	System.out.println("Aterriza "+plane.getPlane()+plane.getId());
-    	plane.setPosXY(zoneDestination.getPosx(), zoneDestination.getPosy());
-    	//Dormir mientras es tiempo de volar otra vez.
-    	plane.setFlyOutTime();
-    	long flyTimeOut = plane.getFlyOutTime();
-		sleep(flyTimeOut);
-    	flyPlane(plane, searchPort()); //BUSCAR ATERRIZAJE
-    	
-    }
+//    public void flyPlane(Plane plane, AirPort zoneDestination) {
+//    	//movimiento
+//	    plane.setTransition(zoneDestination.getPosx(), zoneDestination.getPosy());    	
+//    	//Dormir mientras avion llega
+//    	
+//    	//Aterriza
+//    	//Dormir mientras es tiempo de volar otra vez.
+//    	plane.setFlyOutTime();
+//    	long flyTimeOut = plane.getFlyOutTime();
+//    	BasicFunctions.sleep(flyTimeOut);
+//    	flyPlane(plane, searchPort()); //BUSCAR ATERRIZAJE
+//    	
+//    }
     
-    public void sleep(double sleep) {
-    	try {
-			Thread.sleep((long) (sleep*1000));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-//			System.out.println("No se duerme el Thread. Error");
-		}
-    }
-    
-    
+//	private void inspectTask() {
+//	long time = 7*1000;
+//	Timer timer = new Timer();
+//	timer.schedule(new TimerTask(){
+//	    public void run(){
+//	    	try{drawPlane();}
+//	    	catch(IllegalStateException e){System.out.println("No se pudo dibujar");}
+//	    }}, 0, time);
+//}
+
+//public void drawPlane() {
+//	Nodo<Plane> nodo = planesList.getLast();
+//	if(nodo==null) return;
+//	Plane plane = nodo.getNodo();
+//	plane.createimg();
+//	System.out.println("\nPlane"+plane.getId());
+//	mapAnchorPane.getChildren().add(plane);
+//}
 
     
 }

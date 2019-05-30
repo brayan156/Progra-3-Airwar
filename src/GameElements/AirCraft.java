@@ -1,4 +1,4 @@
-package Interface;
+package GameElements;
 
 public class AirCraft extends Air {
 	/*Atributes*/	

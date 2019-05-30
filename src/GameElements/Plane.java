@@ -1,21 +1,27 @@
-package Interface;
+package GameElements;
 
 
 import java.util.Random;
 
+import Interface.Controller;
+import Interface.Transition;
+import Others.BasicFunctions;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 public class Plane extends ImageView {
-		private static final int TimeOut = 15;
+		private static final int TimeOut = BasicFunctions.ParseInt(BasicFunctions.getPropertyKey("flyOutTime"));
+		private Random random = new Random();
+
 		double posx;
 		double posy;
-		private int flyOutTime=0;
+		private long flyOutTime=0;
 		private String plane,url;
 		private boolean Alive = true;
-		private Random random = new Random();
-		
+    	private Transition planeTransition = new Transition(this);
+    	
+    	
 	/*Constructor*/
     public Plane(double x, double y) {
         super();
@@ -25,7 +31,7 @@ public class Plane extends ImageView {
         this.posy=y;
         this.setX(this.posx);
         this.setY(this.posy);
-        this.setId(String.valueOf(Controller.planeGenerated));
+        this.setId(String.valueOf(AirPort.counter));  AirPort.counter+=1;
         this.setFlyOutTime();
     }
     
@@ -68,7 +74,7 @@ public class Plane extends ImageView {
 		return posy;
 	}
 
-	public int getFlyOutTime() {
+	public long getFlyOutTime() {
 		System.out.println("Plane FlyOutTime: "+flyOutTime);
 		return flyOutTime;
 	}
@@ -82,25 +88,15 @@ public class Plane extends ImageView {
 	}
 
 	/*Setters*/
-	public void setPosx(int posx) {
-		this.posx = posx;
-//		this.setX(this.posx);
-	}
-
-	public void setPosy(int posy) {
-		this.posy = posy;
-//		this.setY(this.posy);
-	}
-	
-	public void setPosXY(double nextX, double nextY) {
-		this.posx = nextX;
-		this.posy = nextY;
-//		this.setX(posx);
-//		this.setY(posy);
+	public void setXY(double X, double Y) {
+		this.posx = X;
+		this.posy = Y;
+		this.setX(X);
+		this.setY(Y);
 	}
 
 	public void setFlyOutTime() {
-	    this.flyOutTime = random.nextInt(TimeOut- Controller.peligrosidad*10)+1;
+	    this.flyOutTime = random.nextInt(TimeOut - Controller.peligrosidad*10)+2500;
 	}
 	
     public void setPlane(String avion) {
@@ -111,6 +107,19 @@ public class Plane extends ImageView {
 		this.url = url;
 	}
 
-	
+	@Override
+	public String toString() {
+		String str = "PLANE "+getId()+" --> img:"+plane+",posx:"+posx+",posy:"+posy;
+		return str;
+	}
+
+	public void setTransition(double destX, double destY) {
+		this.planeTransition.setTo(destX, destY);
+		this.planeTransition.start();
+		int deploying = this.planeTransition.getDuration();
+		System.out.println("\nDeploying : "+deploying);
+		BasicFunctions.sleep(deploying);
+		this.setXY(destX, destY);
+	}
 
 }

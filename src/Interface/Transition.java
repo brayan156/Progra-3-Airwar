@@ -2,6 +2,8 @@ package Interface;
 
 import java.util.Random;
 
+import GameElements.Plane;
+import Others.BasicFunctions;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 
@@ -11,20 +13,24 @@ public class Transition {
     private Plane plane;
     private int duration;
 	
+	public Transition(Plane nodo) {
+		this.plane = nodo;
+		this.transition = new TranslateTransition();
+		setDuration(BasicFunctions.ParseInt(BasicFunctions.getPropertyKey("duration")));
+	}
+	
 	public Transition (Plane nodo, double destX, double destY) {
 		this.plane = nodo;
-		this.plane.setId(String.valueOf(Controller.planecounter));
 		this.transition = new TranslateTransition();
 		setTo(destX, destY);
-		plane.setPosXY(destX, destY);
-		setDuration(15);
+//		plane.setXY(destX, destY);
+		setDuration(BasicFunctions.ParseInt(BasicFunctions.getPropertyKey("duration")));
 	}
 
 	public void start() {
 		transition.setNode(plane);
 		transition.play();
-		System.out.println("\rDespega "+plane.getPlane()+plane.getId());
-		plane.printCoordinates();
+		System.out.println("\rDespega "+plane.toString());
 	}
 	
 	public void setTo(double destX, double destY) {

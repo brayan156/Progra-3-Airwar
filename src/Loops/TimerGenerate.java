@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 
 public class TimerGenerate  extends  TimerTask{
 	private AnchorPane anchor = new AnchorPane();
-    private NodoList<AirPort> lista = Controller.airportsList;
+    private NodoList<AirPort> lista = Controller.background.getAirports();
 
     
 	public TimerGenerate(AnchorPane mapAnchorPane) {

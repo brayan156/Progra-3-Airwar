@@ -25,13 +25,13 @@ public class AirPort extends Air {
 	    schAnim = new TimeSchedule(new TimerAnimation(plane), plane);
 	    
 	    //dibujar
-	    plane.draw(anchor);
+//	    plane.draw(anchor);
 	    
     	//agregar a la lista de aviones
-	    Controller.planesList.addLast(plane);
+	    Controller.background.addPlane(plane);
 	    
-	    System.out.println("\n\nPLANES NUMBER "+Controller.planesList.getLargo());
-	    Controller.planesList.print();
+	    System.out.println("\n\nPLANES NUMBER "+Controller.background.getPlanes().getLargo());
+	    Controller.background.getPlanes().print();
 	    return true;
     }
     

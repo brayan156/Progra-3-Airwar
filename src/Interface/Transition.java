@@ -50,7 +50,7 @@ public class Transition {
 	}
 
 	public void setDuration(int duration) {
-		this.duration = random.nextInt(duration- Controller.peligrosidad*10)+1;
+		this.duration = random.nextInt(duration- Controller.background.getRisk()*10)+1;
 		transition.setDuration(Duration.seconds(this.duration)); //Duracion por ciclo
 	}
 }

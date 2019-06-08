@@ -96,7 +96,7 @@ public class Plane extends ImageView {
 	}
 
 	public void setFlyOutTime() {
-	    this.flyOutTime = random.nextInt(TimeOut - Controller.peligrosidad*10)+2500;
+	    this.flyOutTime = random.nextInt(TimeOut - Controller.background.getRisk()*10)+2500;
 	}
 	
     public void setPlane(String avion) {

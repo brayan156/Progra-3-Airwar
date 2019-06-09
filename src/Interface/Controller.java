@@ -65,6 +65,7 @@ public class Controller {
     	toDo();
     	toDo();
     	toDo();
+    	toDo();
     	
 	}
       
@@ -156,6 +157,14 @@ public class Controller {
         return;
     }
     
+	private void toDo(){
+		AirPort airport = Controller.background.searchAirPort();
+		if (airport==null) return;
+		airport.generatePlane(mapAnchorPane);
+		airport.print();
+//		System.out.println("Plane Succesfully Created");
+		return;
+	}
     
     
     

@@ -27,18 +27,12 @@ public class TimerGenerate  extends  TimerTask{
 	
 	
 	private void toDo(){
-		int i = 0;
-		while(i<lista.getLargo()) {
-			AirPort airport = lista.get(i);
-			boolean check = airport.generatePlane(anchor);
-			if (!check) {i++; continue;}
-//			System.out.println("--------------------------");
-			System.out.println("Check : "+check);
-			airport.print();
-//		    System.out.println("Plane Succesfully Created");
-//		    System.out.println("--------------------------");
-			return;
-		}
+		AirPort airport = Controller.background.searchAirPort();
+		if (airport==null) return;
+		airport.generatePlane(anchor);
+		airport.print();
+//		System.out.println("Plane Succesfully Created");
+		return;
 	}
 	
 }

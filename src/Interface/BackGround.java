@@ -17,7 +17,7 @@ public class BackGround {
     private NodoList<Air> airList = new NodoList<>();
     private NodoList<AirPort> airportsList = new NodoList<>();
     private NodoList<Plane> planesList = new NodoList<>();
-    
+    private AirPort lastPort = null;
     
     /*Constructor*/
 	public BackGround() {
@@ -28,16 +28,16 @@ public class BackGround {
 	//GENERAR AIRZONES
     private void setTerritory() {
     	for(int i=0; i<4; i++) {
-    		double x  = BasicFunctions.getRandomNum(500)+50;
-    		double y  = BasicFunctions.getRandomNum(670)+50;
+    		double x  = BasicFunctions.getRandomNum(900)+50;
+    		double y  = BasicFunctions.getRandomNum(700)+50;
     		AirPort airport = new AirPort(x, y);
     		airportsList.addLast(airport);
     		airList.addLast(airport);
     		System.out.println("AirPort:"+airport.getId()+" x:"+x+" y:"+y);
     	}
     	for(int i=0; i<3; i++) {
-    		double x  = BasicFunctions.getRandomNum(800)+169;
-    		double y  = BasicFunctions.getRandomNum(500)+199;
+    		double x  = BasicFunctions.getRandomNum(900)+50;
+    		double y  = BasicFunctions.getRandomNum(700)+50;
     		AirCraft aircraft = new AirCraft(x, y);
     		airList.addLast(aircraft);
     		System.out.println("AirCraft:"+aircraft.getId()+" x:"+x+" y:"+y);
@@ -70,12 +70,16 @@ public class BackGround {
     		if (airportsList.get(i).isEmpty()) {
     			vacios.addLast(airportsList.get(i));}
     		i++;
-    	}if (vacios.getLargo()==0) return null;
+    	}
+    	if (vacios.getLargo()==0) return null;
     	return randomAirport(vacios);
     }//random airport
     private AirPort randomAirport(NodoList<AirPort> vacios) {
     	int random = BasicFunctions.getRandomNum(airportsList.getLargo()-1);
-    	return airportsList.get(random);
+    	System.out.println("random "+random);
+    	if (lastPort!=null && lastPort.equals(airportsList.get(random))) return null;
+    	lastPort = airportsList.get(random);
+    	return airportsList.get(random); 
     }
     
     //ADD AVION

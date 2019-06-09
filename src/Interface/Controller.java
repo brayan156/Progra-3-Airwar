@@ -1,10 +1,12 @@
 package Interface;
 
 import GameElements.AirPort;
+import GameElements.Bala;
 import Listas.NodoList;
 import Loops.TimeSchedule;
 import Loops.TimerGenerate;
 import Others.BasicFunctions;
+import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -29,13 +31,36 @@ public class Controller {
 	    //game backgrounds elements
 	    public static BackGround background = new BackGround();
 	    public TimeSchedule schGen;
+	    private long timei,timef;
+	    private Boolean presionado=false;
+	    private NodoList<Bala> listabala= new NodoList<>();
+
+
+        private AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                try {
+                    int cont;
+                    for (cont=0;cont<listabala.getLargo();cont++){
+                        Bala bala=listabala.get(cont);
+                        bala.setY(bala.getY()-bala.getVelocidad());
+                        //aqui tambien va ver si esta dentro del rango de un avion eliminar a ambos y subir la peligrosidad al camino
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
     
     
 	/*initializer*/ 
     public void initialize() throws InterruptedException {
     	BasicFunctions.music(); //music
+        batteryImageView.setFocusTraversable(true);
+        batteryImageView.requestFocus();
     	TankEvent(); //tank listener-movement
 //    	gentrTask();
+        timer.start();
     	drawAir();
     	toDo();
     	toDo();
@@ -77,9 +102,28 @@ public class Controller {
     //tank event
     public void TankEvent() {
     	batteryImageView.setOnKeyPressed(event -> {
-    		System.out.print(event);
             if (event.getCode() == KeyCode.SPACE){
-            	System.out.print("Pressed");
+                if (!presionado) {
+                    System.out.println("he clickeado");
+                    timei = System.currentTimeMillis();
+                    presionado=true;
+                }
+            }
+        });
+        batteryImageView.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.SPACE){
+                ImageView img=(ImageView) (event.getSource());
+                System.out.println("quite click");
+                if (presionado) {
+                    timef = System.currentTimeMillis()-timei;
+                    Double velocidad= (Double.parseDouble(String.valueOf(timef))/1000+1)*3;
+                    System.out.println(img.getTranslateX());
+                    Bala bala=new Bala(img.getTranslateX(),img.getY(),velocidad);
+                    mapAnchorPane.getChildren().add(bala);
+                    listabala.addLast(bala);
+                    presionado=false;
+
+                }
             }
         });
     	TankMovement();
@@ -94,29 +138,23 @@ public class Controller {
 		transition.setToX(mapAnchorPane.getPrefWidth()-batteryImageView.getFitWidth());
 		transition.setNode(batteryImageView);
 		transition.play();
+		System.out.println(transition.getFromX());
 //		System.out.println("Empieza Movimiento Battery");
     }
 
     //generate loop
     private void gentrTask() {
 	    schGen = new TimeSchedule(new TimerGenerate(mapAnchorPane));
-    }  
-    
-	private void toDo(){
-		int i = 0;
-		NodoList<AirPort> lista = background.getAirports();
-		while(i<lista.getLargo()) {
-			AirPort airport = lista.get(i);
-			boolean check = airport.generatePlane(mapAnchorPane);
-			if (!check) {i++; continue;}
-//			System.out.println("--------------------------");
-			System.out.println("Check : "+check);
-			airport.print();
-//		    System.out.println("Plane Succesfully Created");
-//		    System.out.println("--------------------------");
-			return;
-		}
-	}
+    }
+
+    private void toDo(){
+        AirPort airport = Controller.background.searchAirPort();
+        if (airport==null) return;
+        airport.generatePlane(mapAnchorPane);
+        airport.print();
+//		System.out.println("Plane Succesfully Created");
+        return;
+    }
     
     
     

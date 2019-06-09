@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#hola" onKeyReleased="#hola" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller" focusTraversable="true">
+   <children>
+      <ImageView fx:id="tanque" fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="96.0" onKeyPressed="#hola" onKeyReleased="#hola" onKeyTyped="#hola" onMouseClicked="#hola" pickOnBounds="true" preserveRatio="true" >
+         <image>
+            <Image url="@../Media/tank.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>

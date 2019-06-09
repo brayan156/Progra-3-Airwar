@@ -77,10 +77,18 @@ public class Plane extends ImageView {
     public double getPosx() {
 		return posx;
 	}
-    
+
 	public double getPosy() {
 		return posy;
 	}
+	public double getrealx() {
+		return posx+this.getTranslateY();
+	}
+
+	public double getrealy() {
+		return posy+this.getTranslateY();
+	}
+
 
 	public long getFlyOutTime() {
 		return flyOutTime;

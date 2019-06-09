@@ -20,7 +20,7 @@
                   <Image url="@../Media/map2.jpg" />
                </image>
             </ImageView>
-            <ImageView fx:id="batteryImageView" disable="true" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" y="800.0" AnchorPane.bottomAnchor="0.0">
+            <ImageView fx:id="batteryImageView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" y="800.0" AnchorPane.bottomAnchor="0.0">
                <image>
                   <Image url="@../Media/tank.png" />
                </image>

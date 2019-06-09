@@ -40,6 +40,7 @@ public class Controller {
     	toDo();
     	toDo();
     	toDo();
+    	toDo();
     	
 	}
       
@@ -103,19 +104,12 @@ public class Controller {
     }  
     
 	private void toDo(){
-		int i = 0;
-		NodoList<AirPort> lista = background.getAirports();
-		while(i<lista.getLargo()) {
-			AirPort airport = lista.get(i);
-			boolean check = airport.generatePlane(mapAnchorPane);
-			if (!check) {i++; continue;}
-//			System.out.println("--------------------------");
-			System.out.println("Check : "+check);
-			airport.print();
-//		    System.out.println("Plane Succesfully Created");
-//		    System.out.println("--------------------------");
-			return;
-		}
+		AirPort airport = Controller.background.searchAirPort();
+		if (airport==null) return;
+		airport.generatePlane(mapAnchorPane);
+		airport.print();
+//		System.out.println("Plane Succesfully Created");
+		return;
 	}
     
     

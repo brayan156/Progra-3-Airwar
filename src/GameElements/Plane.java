@@ -116,15 +116,13 @@ public class Plane extends ImageView {
 
 	public void setTransition(Air prevZone, Air nextZone) {
 		if (prevZone == null || nextZone == null) return;
-		this.planeTransition.setTo(nextZone.getPosx(), nextZone.getPosy());
-		Controller.background.setCurrent(prevZone, null);
-		int deploying = this.planeTransition.getDuration();
-		this.planeTransition.start();
-		System.out.print("Deploying : "+deploying+"seg (plane:"+getId()+") ");
-		nextZone.print();
-		BasicFunctions.sleep(deploying+2);
-//		this.setXY(nextZone.getPosx(), nextZone.getPosy());
-		Controller.background.setCurrent(nextZone, this);
+		Controller.background.setCurrent(nextZone, this); //set next location to full
+		Controller.background.setCurrent(prevZone, null); //set prev location to empty
+		planeTransition.setTo(nextZone.getPosx(), nextZone.getPosy());
+		planeTransition.start(); /*start animation*/
+		/*prints*/
+		System.out.print("\nDeploying : "+planeTransition.getDuration()+" seg. (plane:"+getId()+") -> ");nextZone.print();
+		BasicFunctions.sleep(planeTransition.getDuration()+2);
 	}
 
 	public void setCurrentZone(Air air) {

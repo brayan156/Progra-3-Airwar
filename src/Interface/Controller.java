@@ -1,5 +1,7 @@
 package Interface;
 
+import GameElements.AirPort;
+import Listas.NodoList;
 import Loops.TimeSchedule;
 import Loops.TimerGenerate;
 import Others.BasicFunctions;
@@ -8,26 +10,25 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class Controller {
 	
-	/*Atributes*/
-	//game interface elements
-    @FXML private AnchorPane mapAnchorPane = new AnchorPane();
-    @FXML private ImageView batteryImageView = new ImageView();
-    @FXML private Rectangle r= new Rectangle();
-    @FXML private ProgressBar powerProgressBar = new ProgressBar();
-    @FXML private Text aliveText =  new Text(); 
-    @FXML private Text  slayedText =  new Text(); 
-    //game backgrounds elements
-    public static BackGround background = new BackGround();
-    public TimeSchedule schGen;
+		/*Atributes*/
+		//game interface elements
+	    @FXML private AnchorPane mapAnchorPane = new AnchorPane();
+	    @FXML private ImageView batteryImageView = new ImageView();
+	    @FXML private Rectangle r= new Rectangle();
+	    @FXML private ProgressBar powerProgressBar = new ProgressBar();
+	    @FXML private Text aliveText =  new Text(); 
+	    @FXML private Text  slayedText =  new Text(); 
+	    //game backgrounds elements
+	    public static BackGround background = new BackGround();
+	    public TimeSchedule schGen;
     
     
 	/*initializer*/ 
@@ -35,6 +36,11 @@ public class Controller {
     	BasicFunctions.music(); //music
     	TankEvent(); //tank listener-movement
 //    	gentrTask();
+    	drawAir();
+    	toDo();
+    	toDo();
+    	toDo();
+    	
 	}
       
     //scores    
@@ -45,6 +51,25 @@ public class Controller {
     public void setSlayed() { //slayed
     	background.setSlayed();
     	slayedText.setText(String.valueOf(background.getSlayed()));
+    }
+    public void drawAir() {
+    	for(int i=0; i<background.getZones().getLargo(); i++) { 
+	        Rectangle r = new Rectangle();
+	        r.setX(background.getZones().get(i).getPosx());
+	        r.setY(background.getZones().get(i).getPosy());
+	        r.setWidth(40);
+	        r.setHeight(40);
+//	        r.setArcWidth(50);
+//	        r.setArcHeight(50);
+    		if (background.getZones().get(i) instanceof AirPort) {
+    	        r.setFill(Color.RED);
+    	        r.setStroke(Color.BLUE);
+    		}else {
+    	        r.setFill(Color.GREEN);
+    	        r.setStroke(Color.ORANGE);
+    		}
+	        mapAnchorPane.getChildren().add(r);
+    	}
     }
    
 	
@@ -69,7 +94,7 @@ public class Controller {
 		transition.setToX(mapAnchorPane.getPrefWidth()-batteryImageView.getFitWidth());
 		transition.setNode(batteryImageView);
 		transition.play();
-		System.out.println("Empieza Movimiento Battery");
+//		System.out.println("Empieza Movimiento Battery");
     }
 
     //generate loop
@@ -77,6 +102,21 @@ public class Controller {
 	    schGen = new TimeSchedule(new TimerGenerate(mapAnchorPane));
     }  
     
+	private void toDo(){
+		int i = 0;
+		NodoList<AirPort> lista = background.getAirports();
+		while(i<lista.getLargo()) {
+			AirPort airport = lista.get(i);
+			boolean check = airport.generatePlane(mapAnchorPane);
+			if (!check) {i++; continue;}
+//			System.out.println("--------------------------");
+			System.out.println("Check : "+check);
+			airport.print();
+//		    System.out.println("Plane Succesfully Created");
+//		    System.out.println("--------------------------");
+			return;
+		}
+	}
     
     
     

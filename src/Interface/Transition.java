@@ -8,10 +8,10 @@ import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 
 public class Transition {
-	private TranslateTransition transition;
-    private Random random = new Random();
-    private Plane plane;
-    private int duration;
+		private TranslateTransition transition;
+	    private Random random = new Random();
+	    private Plane plane;
+	    private int duration;
 	
 	public Transition(Plane nodo) {
 		this.plane = nodo;
@@ -30,22 +30,21 @@ public class Transition {
 	public void start() {
 		transition.setNode(plane);
 		transition.play();
-		System.out.println("\rDespega "+plane.toString());
+//		System.out.println("\rDespega "+plane.toString());
 	}
 	
 	public void setTo(double destX, double destY) {
     	double transX = destX - plane.getPosx();
     	double transY = destY - plane.getPosy();
-    	System.out.println("\n\n================================");
-    	System.out.println("Plane >   "+plane.getPosx()+" "+plane.getPosy());
-    	System.out.println("Dest  >   "+destX+" "+destY);
-    	System.out.println("Mover >>  "+transX+" "+transY);
+//    	System.out.println("\n\n================================");
+//    	System.out.println("Plane >   "+plane.getPosx()+" "+plane.getPosy());
+//    	System.out.println("Dest  >   "+destX+" "+destY);
+//    	System.out.println("Mover >>  "+transX+" "+transY);
 		this.transition.setToX(transX);
 		this.transition.setToY(transY);
 	}
 	
 	public int getDuration() {
-		System.out.println("Transition Duration: "+duration);
 		return duration;
 	}
 

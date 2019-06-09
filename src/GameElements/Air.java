@@ -8,14 +8,13 @@ public class Air extends ImageView {
 	protected double posy;
 	protected Plane plane=null;
 	protected int id;
-	private static int idCounter;
+	private static int idCounter=0;
 	
 	/*Constructor*/
 	public Air(double x, double y) {
 		this.posx = x;
 		this.posy = y;
-		this.id = idCounter;
-		idCounter+=1;
+		this.setId(String.valueOf(idCounter));	idCounter+=1;
 	}
 	
 	public void receivePlane(Plane plane) {
@@ -26,7 +25,16 @@ public class Air extends ImageView {
 		if (plane==null) return true;
 		return false;
 	}
-
+	
+    public void print() {
+    	System.out.println(toString());
+    }
+    
+	@Override
+	public String toString() {
+		String str = "[Air : "+getId()+"] ("+posx+","+posy+")";
+		return str;
+	}
 	
 	
 	/*Getters*/
@@ -41,10 +49,6 @@ public class Air extends ImageView {
 	public Plane getPlane() {
 		return plane;
 	}
-	
-	public int getid() {
-		return id;
-	}
 
 
 	/*Setters*/
@@ -56,7 +60,11 @@ public class Air extends ImageView {
 		this.posy = posy;
 	}
 
-	public void setEmpty() {
-		this.plane =null;
+	public void setPlane(Plane plane) {
+		this.plane=plane;
 	}
+	public void setPlanesZone() {
+		this.plane.setCurrentZone(this);
+	}
+	
 }

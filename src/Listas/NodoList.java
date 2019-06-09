@@ -1,7 +1,5 @@
 package Listas;
 
-import java.util.ArrayList;
-
 public class NodoList <T> {
     int largo;
     Nodo<T> head= null;
@@ -65,11 +63,19 @@ public class NodoList <T> {
 	}
 	
 	public void print() {
+		System.out.println(toString());
+	}
+	
+	@Override
+	public String toString() {
+		String str=">> LIST <<";
     	Nodo<T> tmp = this.head;
     	while (tmp != null) {
-    		System.out.println(tmp.getNodo().toString());
+    		str = str+"\n|||"+tmp.getNodo().toString();
     		tmp = tmp.next;
     	}
+    	return str;
+    	
 	}
 	
 	public NodoList<T> getCompared(NodoList<T> list2){

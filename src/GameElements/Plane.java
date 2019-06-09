@@ -13,20 +13,21 @@ import javafx.scene.layout.AnchorPane;
 public class Plane extends ImageView {
 		private static final int TimeOut = BasicFunctions.ParseInt(BasicFunctions.getPropertyKey("flyOutTime"));
 		private Random random = new Random();
+		
 
 		double posx;
 		double posy;
 		private long flyOutTime=0;
-		private String plane,url;
+		private String img,url;
 		private boolean Alive = true;
     	private Transition planeTransition = new Transition(this);
-    	
-    	
+		private Air air = null;
+    
 	/*Constructor*/
     public Plane(double x, double y) {
         super();
         this.setPlane(EnumPlanes.getRandomAvion());
-        this.setUrl("file:src/Media/"+plane+".PNG");
+        this.setUrl("file:src/Media/"+img+".PNG");
         this.posx=x;
         this.posy=y;
         this.setX(this.posx);
@@ -54,16 +55,23 @@ public class Plane extends ImageView {
     	createimg();
     	anchorPane.getChildren().add(this);
     }
-	public void kill(AnchorPane anchorPane) throws InterruptedException {
+	public void slaye(AnchorPane anchorPane) throws InterruptedException {
         this.setImage(new Image("file:src/Media/explosion.PNG"));
         Thread.sleep(1000);
 		anchorPane.getChildren().remove(this);
 		Alive = false;
 	}
 	
-	public void printCoordinates() {
-    	System.out.println("Coordenadas X "+posx+" \nCoordenadas Y "+posy);
+	public void print() {
+	System.out.println(toString());
 	}
+	
+	@Override
+	public String toString() {
+		String str = "[PLANE "+getId()+"] ("+posx+","+posy+")"+"(img:"+img+")";
+		return str;
+	}
+	
     
     /*Getters*/
     public double getPosx() {
@@ -75,7 +83,6 @@ public class Plane extends ImageView {
 	}
 
 	public long getFlyOutTime() {
-		System.out.println("Plane FlyOutTime: "+flyOutTime);
 		return flyOutTime;
 	}
 
@@ -84,7 +91,7 @@ public class Plane extends ImageView {
 	}
 	
 	public String getPlane() {
-		return plane;
+		return img;
 	}
 
 	/*Setters*/
@@ -100,26 +107,31 @@ public class Plane extends ImageView {
 	}
 	
     public void setPlane(String avion) {
-		this.plane = avion;
+		this.img = avion;
 	}
 
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
-	@Override
-	public String toString() {
-		String str = "PLANE "+getId()+" --> img:"+plane+",posx:"+posx+",posy:"+posy;
-		return str;
+	public void setTransition(Air prevZone, Air nextZone) {
+		if (prevZone == null || nextZone == null) return;
+		this.planeTransition.setTo(nextZone.getPosx(), nextZone.getPosy());
+		Controller.background.setCurrent(prevZone, null);
+		int deploying = this.planeTransition.getDuration();
+		this.planeTransition.start();
+		System.out.print("Deploying : "+deploying+"seg (plane:"+getId()+") ");
+		nextZone.print();
+		BasicFunctions.sleep(deploying+2);
+//		this.setXY(nextZone.getPosx(), nextZone.getPosy());
+		Controller.background.setCurrent(nextZone, this);
 	}
 
-	public void setTransition(double destX, double destY) {
-		this.planeTransition.setTo(destX, destY);
-		this.planeTransition.start();
-		int deploying = this.planeTransition.getDuration();
-		System.out.println("\nDeploying : "+deploying);
-		BasicFunctions.sleep(deploying);
-		this.setXY(destX, destY);
+	public void setCurrentZone(Air air) {
+		this.air = air;
+	}
+	public Air getCurrentZone() {
+		return air;
 	}
 
 }

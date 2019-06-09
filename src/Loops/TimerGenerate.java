@@ -10,8 +10,8 @@ import javafx.scene.layout.AnchorPane;
 
 
 public class TimerGenerate  extends  TimerTask{
-	private AnchorPane anchor = new AnchorPane();
-    private NodoList<AirPort> lista = Controller.background.getAirports();
+		private AnchorPane anchor = new AnchorPane();
+	    private NodoList<AirPort> lista = Controller.background.getAirports();
 
     
 	public TimerGenerate(AnchorPane mapAnchorPane) {
@@ -29,13 +29,14 @@ public class TimerGenerate  extends  TimerTask{
 	private void toDo(){
 		int i = 0;
 		while(i<lista.getLargo()) {
-//			System.out.println("\ni :"+i);
 			AirPort airport = lista.get(i);
-//			System.out.println("AirPort : "+airport.getPosx()+" "+airport.getPosy());
 			boolean check = airport.generatePlane(anchor);
 			if (!check) {i++; continue;}
+//			System.out.println("--------------------------");
 			System.out.println("Check : "+check);
-		    System.out.println("Plane Succesfully Created");
+			airport.print();
+//		    System.out.println("Plane Succesfully Created");
+//		    System.out.println("--------------------------");
 			return;
 		}
 	}

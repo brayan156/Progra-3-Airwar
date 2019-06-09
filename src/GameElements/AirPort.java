@@ -17,22 +17,34 @@ public class AirPort extends Air {
 	}
 	
     public boolean generatePlane(AnchorPane anchor) {
-    	if (!this.isEmpty()) return false; 	
+    	if (!this.isEmpty()) return false; 
+    	
     	//aeropuerto en que se crea manda sus posiciones.
     	this.plane = new Plane(this.posx, this.posy);
+    	this.plane.setCurrentZone(this);
     	
     	//agregar animacion
 	    schAnim = new TimeSchedule(new TimerAnimation(plane), plane);
 	    
 	    //dibujar
-//	    plane.draw(anchor);
+	    plane.draw(anchor);
 	    
     	//agregar a la lista de aviones
 	    Controller.background.addPlane(plane);
 	    
-	    System.out.println("\n\nPLANES NUMBER "+Controller.background.getPlanes().getLargo());
-	    Controller.background.getPlanes().print();
+	    System.out.println("\rNUM. PLANES: "+Controller.background.getPlanes().getLargo());
+//	    Controller.background.getPlanes().print();
 	    return true;
     }
+    
+    public void print() {
+    	System.out.println(toString());
+    }
+    
+	@Override
+	public String toString() {
+		String str = "[Port : "+getId()+"] ("+posx+","+posy+")";
+		return str;
+	}
     
 }

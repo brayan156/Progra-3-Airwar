@@ -62,9 +62,13 @@ public class Controller {
     
 	/*initializer*/ 
     public void initialize() throws InterruptedException {
+        batteryImageView.setFocusTraversable(true);
+        batteryImageView.requestFocus();
+    	TankEvent(); //tank listener-movement
+//    	gentrTask();
+        timer.start();
     	setGraphics();
     	setMusic();
-    	TankEvent(); 
     	drawAir();
     	gentrTask();
 //    	toDo();

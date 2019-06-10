@@ -131,6 +131,13 @@ public class Plane extends ImageView {
 		/*prints*/
 		System.out.print("\nDeploying : "+planeTransition.getDuration()+" seg. (plane:"+getId()+") -> ");nextZone.print();
 		BasicFunctions.sleep(planeTransition.getDuration()+2);
+		planeTransition.getTransition().setOnFinished(event -> {
+			System.out.print("\nbefore : "); print();
+			this.setXY(getX()+getTranslateX(), getY()+getTranslateY());
+		    this.setTranslateX(0);
+		    System.out.print("after : "); print();
+		    this.setTranslateY(0);
+		});
 	}
 
 	public void setCurrentZone(Air air) {

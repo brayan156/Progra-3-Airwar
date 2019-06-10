@@ -73,8 +73,6 @@ public class Controller {
     	}
     }
    
-	
-    
     //tank event
     public void TankEvent() {
     	batteryImageView.setOnKeyPressed(event -> {

@@ -31,6 +31,7 @@ public class Transition {
 		transition.setNode(plane);
 		transition.play();
 //		System.out.println("\rDespega "+plane.toString());
+		
 	}
 	
 	public void setTo(double destX, double destY) {
@@ -52,4 +53,11 @@ public class Transition {
 		this.duration = random.nextInt(duration- Controller.background.getRisk()*10)+1;
 		transition.setDuration(Duration.seconds(this.duration)); //Duracion por ciclo
 	}
+	
+	public TranslateTransition getTransition() {
+		return transition;
+	}
+	
+	
+	
 }

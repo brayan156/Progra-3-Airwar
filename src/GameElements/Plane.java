@@ -1,7 +1,6 @@
 package GameElements;
 
 
-import java.time.Duration;
 import java.util.Random;
 
 import Interface.Controller;
@@ -15,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
 public class Plane extends ImageView {
 		private static final int TimeOut = BasicFunctions.ParseInt(BasicFunctions.getPropertyKey("flyOutTime"));
 		private Random random = new Random();
-		
+		private boolean done = true;
 
 		double posx;
 		double posy;
@@ -24,6 +23,7 @@ public class Plane extends ImageView {
 		private boolean Alive = true;
     	private Transition planeTransition = new Transition(this);
 		private Air air = null;
+		private Tooltip tooltip = new Tooltip("loading...");
     
 	/*Constructor*/
     public Plane(double x, double y) {
@@ -37,15 +37,14 @@ public class Plane extends ImageView {
         AirPort.counter+=1;
         this.setId(String.valueOf(AirPort.counter));  
         this.setFlyOutTime();
-        setTooltip();
+        installTooltip();
     }
     
-    public void setTooltip() {
-        Tooltip tooltip = new Tooltip("plane "+ getId());
-//        tooltip.setStyle("-fx-show-duration: 0.2s");
-        Tooltip.install(this, tooltip);
+	
+    private void installTooltip() {
+      Tooltip.install(this, this.tooltip);
     }
-    
+  
     //crear imagen
     public void createimg(){
     	Image img = new Image(url, 40,40, true, true);
@@ -107,6 +106,15 @@ public class Plane extends ImageView {
 	public String getPlane() {
 		return img;
 	}
+	public Tooltip getTooltip() {
+		return tooltip;
+	}
+	public Air getCurrentZone() {
+		return air;
+	}
+	public boolean getTransitionDone() {
+		return done;
+	}
 
 	/*Setters*/
 	public void setXY(double X, double Y) {
@@ -115,19 +123,17 @@ public class Plane extends ImageView {
 		this.setX(X);
 		this.setY(Y);
 	}
-
 	public void setFlyOutTime() {
-	    this.flyOutTime = random.nextInt(TimeOut - Controller.background.getRisk()*10)+2500;
+//	    this.flyOutTime = random.nextInt(TimeOut - Controller.background.getRisk()*5)+2;
+	    this.flyOutTime = random.nextInt(5)+2;
+	    System.out.println(flyOutTime);
 	}
-	
     public void setPlane(String avion) {
 		this.img = avion;
 	}
-
 	public void setUrl(String url) {
 		this.url = url;
 	}
-
 	public void setTransition(Air prevZone, Air nextZone) {
 		if (prevZone == null || nextZone == null) return;
 		Controller.background.setCurrent(nextZone, this); //set next location to full
@@ -135,29 +141,38 @@ public class Plane extends ImageView {
 //		System.out.println("\\\\\\\\\\\\\\\\\\\"");
 //		System.out.print("From : ");prevZone.print();
 //		System.out.print("To   : ");nextZone.print();
+		done=false;
 		planeTransition.setTo(nextZone.getPosx(), nextZone.getPosy());
+		setTooltipText(prevZone, nextZone);
 		planeTransition.start(); /*start animation*/
 //		System.out.println(planeTransition.getTransition().getToX());
 //		System.out.println(planeTransition.getTransition().getToY());
 		/*prints*/
 //		System.out.print("\nDeploying : "+planeTransition.getDuration()+" seg. (plane:"+getId()+") -> ");nextZone.print();
 //		System.out.println(this.getLocalToSceneTransform());
-		BasicFunctions.sleep(planeTransition.getDuration()+2);
+//		BasicFunctions.sleep(planeTransition.getDuration()+2);
 		planeTransition.getTransition().setOnFinished(event -> {
 //			System.out.print("\nbefore : "); print();
 //			this.setXY(getX()+getTranslateX(), getY()+getTranslateY());
 //		    this.setTranslateX(0);
 //		    System.out.print("after : "); print();
 //		    this.setTranslateY(0);
+			air = nextZone;
+			done=true;
 		});
 	}
-	
-
 	public void setCurrentZone(Air air) {
 		this.air = air;
 	}
-	public Air getCurrentZone() {
-		return air;
+	public void setTooltip(Tooltip tooltip) {
+		this.tooltip = tooltip;
 	}
+	public void setTooltipText(Air prev, Air next) {
+		String str = "Plane "+getId() + " | "+ prev.getShortDetails() + " -> " + next.getShortDetails();
+		this.tooltip.setText(str);
+	}
+
+
+
 
 }

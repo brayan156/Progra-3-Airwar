@@ -2,7 +2,7 @@ package Interface;
 
 import GameElements.Air;
 import GameElements.AirPort;
-import Loops.TimeSchedule;
+import Loops.TimeAnimation;
 import Others.BasicFunctions;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -32,7 +32,7 @@ public class Controller {
 	    @FXML private Text  countText =  new Text(); 
 	    //game backgrounds elements
 	    public static BackGround background = new BackGround();
-	    public TimeSchedule schGen;
+	    public TimeAnimation schGen;
 	    private int count;
     
     
@@ -123,13 +123,14 @@ public class Controller {
     
     //generate loop
     private void gentrTask() {
+    	
     	long time = BasicFunctions.ParseLong(BasicFunctions.getPropertyKey("spawn"));
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(time), generate -> {
 			countdownTask();
 			AirPort airport = Controller.background.searchAirPort();
 			if (airport==null) {return;}
 			else if (Controller.background.getAlive() == 6) {System.out.println("MAXIMO DE AVIONES EN PANTALLA (6)"); return;}
-			airport.generatePlane();
+			airport.generatePlane(mapAnchorPane);
 			System.out.print("Plane Succesfully Created in : "); airport.print();
 		}));
     timeline.setCycleCount(Animation.INDEFINITE);

@@ -2,14 +2,16 @@ package GameElements;
 
 
 import Interface.Controller;
-import Loops.TimeSchedule;
-import Loops.TimerAnimation;
-import javafx.scene.control.Tooltip;
+import Loops.TimeAnimation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 public class AirPort extends Air {
 	/*Atributes*/	
 	public static int counter=0;
-    public TimeSchedule schAnim;
+    public TimeAnimation schAnim;
     
     
 	/*Constructor*/
@@ -17,19 +19,30 @@ public class AirPort extends Air {
 		super(x, y);
 	}
 	
-    public void generatePlane() {
+    public void generatePlane(AnchorPane mapAnchorPane) {
     	if (!this.isEmpty()) return;
     	//actualizar avion del aereopuerto.
     	this.plane = new Plane(this.posx, this.posy);
     	plane.setCurrentZone(this);
-    	schAnim = new TimeSchedule(new TimerAnimation(plane), plane); //animacion
-	    plane.draw(Controller.background.getAnchorPane()); //dibujar
-	    
+    	schAnim = new TimeAnimation(plane); //animacion
+    	
+	    plane.draw(mapAnchorPane); //dibujar
+//	    animation();
 	    //funciones..
 	    updateStats();
 	    showDetails();
     }
     
+    public void animation() {
+    	Timeline cd = new Timeline(new KeyFrame(Duration.seconds(plane.getFlyOutTime()), write -> {
+    		Air zone = Controller.background.search();
+    		System.out.println("todo");
+//    		if (zone.equals(plane.getCurrentZone())) {toDo(); return;}
+    		plane.setTransition(plane.getCurrentZone(),zone);
+    	}));
+//    	cd.setCycleCount(1);
+    	cd.play();
+    }
     
     public void updateStats() {
 	    Controller.background.addPlane(plane);	//agregar a la lista de aviones
@@ -52,5 +65,7 @@ public class AirPort extends Air {
 		String str = "[Port : "+getId()+"] ("+posx+","+posy+")";
 		return str;
 	}
+	
+
     
 }

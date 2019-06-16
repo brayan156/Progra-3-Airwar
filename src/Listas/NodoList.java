@@ -26,6 +26,29 @@ public class NodoList <T> {
         head=n;
         largo++;
     }
+	public void eliminar(T t){
+		if (this.head.getNodo().equals(t)){
+			System.out.println(t);
+			System.out.println(this.head);
+			this.head=this.head.next;
+			largo-=1;
+		}
+		else{
+			Nodo<T>tmp=this.head;
+			while (tmp.next!=null){
+				if (tmp.next.getNodo().equals(t)){
+					System.out.println(t);
+					System.out.println(tmp);
+					tmp.next=tmp.next.next;
+					largo-=1;
+					break;
+				}
+				else {
+					tmp=tmp.next;
+				}
+			}
+		}
+	}
     
 	public void addAll(NodoList<T> list){
 		for (int i =0; i<list.getLargo(); i++) {

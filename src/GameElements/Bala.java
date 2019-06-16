@@ -16,10 +16,10 @@ public class Bala extends ImageView {
         this.setX(this.posx); 
         this.setY(this.posy); 
         this.crearimagen();
-        this.rangox=20;
-        this.rangoy=20;
-        this.setFitWidth(rangox*2);
-        this.setFitHeight(rangoy*2);
+        this.rangox=40;
+        this.rangoy=40;
+        this.setFitWidth(rangox);
+        this.setFitHeight(rangoy);
         this.velocidad=velocidad;
     }
 

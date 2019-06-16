@@ -24,6 +24,7 @@ public class Plane extends ImageView {
     	private Transition planeTransition = new Transition(this);
 		private Air air = null;
 		private Tooltip tooltip = new Tooltip("loading...");
+		private int rangox,rangoy;
     
 	/*Constructor*/
     public Plane(double x, double y) {
@@ -34,6 +35,8 @@ public class Plane extends ImageView {
         this.posy=y;
         this.setX(this.posx);
         this.setY(this.posy);
+		this.rangox=40;
+		this.rangoy=40;
         AirPort.counter+=1;
         this.setId(String.valueOf(AirPort.counter));  
         this.setFlyOutTime();
@@ -47,7 +50,7 @@ public class Plane extends ImageView {
   
     //crear imagen
     public void createimg(){
-    	Image img = new Image(url, 40,40, true, true);
+    	Image img = new Image(url, rangox,rangoy, true, true);
         this.setImage(img);
     }
     
@@ -69,8 +72,7 @@ public class Plane extends ImageView {
     	}
     }
 	public void slaye(AnchorPane anchorPane) throws InterruptedException {
-        this.setImage(new Image("file:src/Media/explosion.PNG"));
-        Thread.sleep(1000);
+//        this.setImage(new Image("file:src/Media/explosion.PNG"));
 		anchorPane.getChildren().remove(this);
 		Alive = false;
 	}
@@ -95,7 +97,7 @@ public class Plane extends ImageView {
 		return posy;
 	}
 	public double getrealx() {
-		return posx+this.getTranslateY();
+		return posx+this.getTranslateX();
 	}
 
 	public double getrealy() {
@@ -123,13 +125,7 @@ public class Plane extends ImageView {
 	public boolean getTransitionDone() {
 		return done;
 	}
-	public double getrealx() {
-		return posx+this.getTranslateY();
-	}
 
-	public double getrealy() {
-		return posy+this.getTranslateY();
-	}
 
 	/*Setters*/
 	public void setXY(double X, double Y) {

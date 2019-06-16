@@ -2,12 +2,16 @@ package Interface;
 
 import GameElements.Air;
 import GameElements.AirPort;
+import GameElements.Bala;
+import Listas.NodoList;
 import Loops.TimeAnimation;
 import Others.BasicFunctions;
+import javafx.animation.AnimationTimer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
@@ -33,7 +37,27 @@ public class Controller {
 	    //game backgrounds elements
 	    public static BackGround background = new BackGround();
 	    public TimeAnimation schGen;
-	    private int count;
+	    private int count, progress;
+	    private long timei,timef;
+	    private Boolean presionado=false;
+	    private NodoList<Bala> listabala= new NodoList<>();
+    
+        private AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                try {
+                    int cont;
+                    for (cont=0;cont<listabala.getLargo();cont++){
+                        Bala bala=listabala.get(cont);
+                        bala.setY(bala.getY()-bala.getVelocidad());
+                        //aqui tambien va ver si esta dentro del rango de un avion eliminar a ambos y subir la peligrosidad al camino
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    
     
     
 	/*initializer*/ 
@@ -46,7 +70,7 @@ public class Controller {
 //    	toDo();
 //    	toDo();
     	
-	}
+	} 
     
     //music
     private void setMusic() {
@@ -92,15 +116,40 @@ public class Controller {
     
     //tank listener-movement
     public void TankEvent() {
+        batteryImageView.setFocusTraversable(true);
+        batteryImageView.requestFocus();
+        timer.start();
     	batteryImageView.setOnKeyPressed(event -> {
-    		System.out.print(event);
             if (event.getCode() == KeyCode.SPACE){
-            	System.out.print("Pressed");
+                if (!presionado) {
+//                    System.out.println("he clickeado");
+                    timei = System.currentTimeMillis();
+                    progressTask();
+        			System.out.println(timei);
+
+                    presionado=true;
+                }
+            }
+        });
+        batteryImageView.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.SPACE){
+                ImageView img=(ImageView) (event.getSource());
+//                System.out.println("quite click");
+                if (presionado) {
+                    timef = System.currentTimeMillis()-timei;
+                    Double velocidad= (Double.parseDouble(String.valueOf(timef))/1000+1)*3;
+//                    System.out.println(img.getTranslateX());
+                    Bala bala = new Bala(img.getTranslateX(),img.getY(),velocidad);
+                    mapAnchorPane.getChildren().add(bala);
+                    listabala.addLast(bala);
+                    presionado=false;
+                    int i = 5;
+                    System.out.println(i/100);
+                }
             }
         });
     	TankMovement(false);
     }
-    
     
     //tank movement
     private void TankMovement(boolean comeback) {
@@ -119,6 +168,7 @@ public class Controller {
 			transition.setToX(mapAnchorPane.getPrefWidth()-batteryImageView.getFitWidth());
 		}
 		transition.play();
+//		System.out.println(transition.getFromX());
     }
     
     //generate loop
@@ -131,7 +181,7 @@ public class Controller {
 			if (airport==null) {return;}
 			else if (Controller.background.getAlive() == 6) {System.out.println("MAXIMO DE AVIONES EN PANTALLA (6)"); return;}
 			airport.generatePlane(mapAnchorPane);
-			System.out.print("Plane Succesfully Created in : "); airport.print();
+//			System.out.print("Plane Succesfully Created in : "); airport.print();
 		}));
     timeline.setCycleCount(Animation.INDEFINITE);
     timeline.play();
@@ -146,6 +196,54 @@ public class Controller {
     	cd.setCycleCount(4);
     	cd.play();
     }
+    
+    
+    //progress bar
+    private void progressTask() {
+    	Task<?> task = taskCreator(100);
+    	powerProgressBar.progressProperty().unbind();
+    	powerProgressBar.progressProperty().bind(task.progressProperty());
+    	new Thread(task).start();
+    }
+    private Task<?> taskCreator(int sec) {
+    	return new Task<Object>() {
+    		@Override
+    		protected Object call() throws Exception{
+    			for(int i=1; i<=1000; i+=1) {
+    				if(i==100) {i=98;}
+    				else {
+	    				if (presionado){
+	    					Thread.sleep(60);
+	    					updateProgress(i+1, sec);
+	    				}
+	    				else {
+	    					i=7;
+	    					updateProgress(i, sec);
+	    				}
+	    				setPrgColor(i+1/100);
+	    			}
+    			}
+    			return true;
+    		}
+    	};
+    }
+   
+    private void setPrgColor(double progress) {
+        if (progress < 95) {
+        	powerProgressBar.setStyle("-fx-accent: green");
+//        } else if (progress < 66) {
+//			powerProgressBar.setStyle("-fx-accent: yellow");
+//        } else if (progress < 98) {
+//			powerProgressBar.setStyle("-fx-accent: orange");
+        } else {
+        	powerProgressBar.setStyle("-fx-accent: red");
+        }
+    }
+    
+    
+    
+    
+    
     
 
     

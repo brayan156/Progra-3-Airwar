@@ -24,9 +24,7 @@ public class MainController extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("game.fxml"));
         Scene scene = new Scene(root);
         scene.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-            if (KeyCode.ESCAPE == event.getCode()) {gameStage.close();}
-        	else if (KeyCode.SPACE == event.getCode())
-            	System.out.print("Pressed Main");
+            if (KeyCode.ESCAPE == event.getCode()) gameStage.close();
         });
         gameStage.setScene(scene);
         gameStage.initStyle(StageStyle.UNDECORATED);

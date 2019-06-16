@@ -3,6 +3,7 @@ package Interface;
 import GameElements.Air;
 import GameElements.AirPort;
 import GameElements.Bala;
+import GameElements.Plane;
 import Listas.NodoList;
 import Loops.TimeAnimation;
 import Others.BasicFunctions;
@@ -50,15 +51,39 @@ public class Controller {
                     for (cont=0;cont<listabala.getLargo();cont++){
                         Bala bala=listabala.get(cont);
                         bala.setY(bala.getY()-bala.getVelocidad());
+                        if (bala.getY()<-30){listabala.eliminar(bala);mapAnchorPane.getChildren().remove(bala);}
                         //aqui tambien va ver si esta dentro del rango de un avion eliminar a ambos y subir la peligrosidad al camino
                     }
+                    verificarchoque();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         };
     
-    
+    private void verificarchoque(){
+    	NodoList<Plane> aviones= background.getPlanes();
+    	int i,j;
+    	for (i=0; i<aviones.getLargo();i++) {
+			for (j = 0; j < listabala.getLargo(); j++) {
+				Plane avion=aviones.get(i);
+				Bala bala=listabala.get(j);
+				if (Math.abs(bala.getPosx()-avion.getrealx())<32 && Math.abs(bala.getY()-avion.getrealy())<32){
+					try {
+						System.out.println("avion="+avion);
+						mapAnchorPane.getChildren().remove(bala);
+						aviones.eliminar(avion);
+						listabala.eliminar(bala);
+						avion.slaye(this.mapAnchorPane);
+						background.setSlayed();
+						break;
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
     
 	/*initializer*/ 
     public void initialize() throws InterruptedException {
@@ -177,18 +202,16 @@ public class Controller {
     
     //generate loop
     private void gentrTask() {
-    	
-    	long time = BasicFunctions.ParseLong(BasicFunctions.getPropertyKey("spawn"));
-		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(time), generate -> {
-			countdownTask();
-			AirPort airport = Controller.background.searchAirPort();
-			if (airport==null) {return;}
-			else if (Controller.background.getAlive() == 6) {System.out.println("MAXIMO DE AVIONES EN PANTALLA (6)"); return;}
-			airport.generatePlane(mapAnchorPane);
-//			System.out.print("Plane Succesfully Created in : "); airport.print();
-		}));
-    timeline.setCycleCount(Animation.INDEFINITE);
-    timeline.play();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), generate -> {
+            countdownTask();
+            AirPort airport = Controller.background.searchAirPort();
+            if (airport==null) {return;}
+            else if (Controller.background.getAlive() == 6) {System.out.println("MAXIMO DE AVIONES EN PANTALLA (6)"); return;}
+            airport.generatePlane(mapAnchorPane);
+            System.out.print("Plane Succesfully Created in : "); airport.print();
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
     
     private void countdownTask() {

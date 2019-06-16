@@ -123,6 +123,13 @@ public class Plane extends ImageView {
 	public boolean getTransitionDone() {
 		return done;
 	}
+	public double getrealx() {
+		return posx+this.getTranslateY();
+	}
+
+	public double getrealy() {
+		return posy+this.getTranslateY();
+	}
 
 	/*Setters*/
 	public void setXY(double X, double Y) {
@@ -134,7 +141,7 @@ public class Plane extends ImageView {
 	public void setFlyOutTime() {
 //	    this.flyOutTime = random.nextInt(TimeOut - Controller.background.getRisk()*5)+2;
 	    this.flyOutTime = random.nextInt(5)+2;
-	    System.out.println(flyOutTime);
+//	    System.out.println(flyOutTime);
 	}
     public void setPlane(String avion) {
 		this.img = avion;

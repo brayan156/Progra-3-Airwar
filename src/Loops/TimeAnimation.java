@@ -20,7 +20,6 @@ public class TimeAnimation {
 
 
 	private void start() {
-		System.out.println("entra");
     	Timeline timer = new Timeline(new KeyFrame(Duration.seconds(flyOutTime),
 				write -> {
 					toDo();
@@ -38,7 +37,7 @@ public class TimeAnimation {
 //			System.out.println("terminado "+ plane.getId());
 			plane.setTransition(plane.getCurrentZone(),zone);}
 		else {
-			System.out.println("en proceso "+ plane.getId());
+//			System.out.println("en proceso "+ plane.getId());
 		}
 		return;
 	}

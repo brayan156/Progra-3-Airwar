@@ -37,6 +37,11 @@ public class Air extends ImageView {
 		return str;
 	}
 	
+	public String getShortDetails() {
+		String str = "[Zone : "+getId()+"]";
+		return str;
+	}
+	
 	
 	/*Getters*/
 	public double getPosy() {

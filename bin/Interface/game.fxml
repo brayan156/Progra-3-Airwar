@@ -47,7 +47,7 @@
                               <Image url="@../Media/helmet.png" />
                            </image>
                         </ImageView>
-                        <Text fx:id="aliveText" fill="GREEN" strokeType="OUTSIDE" strokeWidth="0.0" text="25" textAlignment="CENTER">
+                        <Text fx:id="aliveText" fill="GREEN" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER">
                            <font>
                               <Font name="Bauhaus 93" size="45.0" />
                            </font>

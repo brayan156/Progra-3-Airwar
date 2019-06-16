@@ -37,7 +37,7 @@ public class Controller {
 	    //game backgrounds elements
 	    public static BackGround background = new BackGround();
 	    public TimeAnimation schGen;
-	    private int count, progress;
+	    private int count;
 	    private long timei,timef;
 	    private Boolean presionado=false;
 	    private NodoList<Bala> listabala= new NodoList<>();
@@ -125,8 +125,7 @@ public class Controller {
 //                    System.out.println("he clickeado");
                     timei = System.currentTimeMillis();
                     progressTask();
-        			System.out.println(timei);
-
+//        			System.out.println(timei);
                     presionado=true;
                 }
             }
@@ -142,10 +141,7 @@ public class Controller {
                     Bala bala = new Bala(img.getTranslateX(),img.getY(),velocidad);
                     mapAnchorPane.getChildren().add(bala);
                     listabala.addLast(bala);
-                    presionado=false;
-                    int i = 5;
-                    System.out.println(i/100);
-                }
+                    presionado=false;                }
             }
         });
     	TankMovement(false);

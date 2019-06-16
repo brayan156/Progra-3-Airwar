@@ -1,11 +1,13 @@
 package GameElements;
 
 
+import java.time.Duration;
 import java.util.Random;
 
 import Interface.Controller;
 import Interface.Transition;
 import Others.BasicFunctions;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -32,8 +34,16 @@ public class Plane extends ImageView {
         this.posy=y;
         this.setX(this.posx);
         this.setY(this.posy);
-        this.setId(String.valueOf(AirPort.counter));  AirPort.counter+=1;
+        AirPort.counter+=1;
+        this.setId(String.valueOf(AirPort.counter));  
         this.setFlyOutTime();
+        setTooltip();
+    }
+    
+    public void setTooltip() {
+        Tooltip tooltip = new Tooltip("plane "+ getId());
+//        tooltip.setStyle("-fx-show-duration: 0.2s");
+        Tooltip.install(this, tooltip);
     }
     
     //crear imagen
@@ -53,7 +63,11 @@ public class Plane extends ImageView {
 	//dibujo avion
     public void draw(AnchorPane anchorPane) {
     	createimg();
-    	anchorPane.getChildren().add(this);
+    	try {anchorPane.getChildren().add(this);}
+    	catch(IllegalStateException i) {
+    		System.out.println("\rNO SE DIBUJA AVION");
+    		i.printStackTrace();
+    	}
     }
 	public void slaye(AnchorPane anchorPane) throws InterruptedException {
         this.setImage(new Image("file:src/Media/explosion.PNG"));
@@ -126,23 +140,23 @@ public class Plane extends ImageView {
 		if (prevZone == null || nextZone == null) return;
 		Controller.background.setCurrent(nextZone, this); //set next location to full
 		Controller.background.setCurrent(prevZone, null); //set prev location to empty
-		System.out.println("\\\\\\\\\\\\\\\\\\\"");
-		prevZone.print();
-		nextZone.print();
+//		System.out.println("\\\\\\\\\\\\\\\\\\\"");
+//		System.out.print("From : ");prevZone.print();
+//		System.out.print("To   : ");nextZone.print();
 		planeTransition.setTo(nextZone.getPosx(), nextZone.getPosy());
 		planeTransition.start(); /*start animation*/
-		System.out.println(planeTransition.getTransition().getToX());
-		System.out.println(planeTransition.getTransition().getToY());
+//		System.out.println(planeTransition.getTransition().getToX());
+//		System.out.println(planeTransition.getTransition().getToY());
 		/*prints*/
-		System.out.print("\nDeploying : "+planeTransition.getDuration()+" seg. (plane:"+getId()+") -> ");nextZone.print();
-		System.out.println(this.getLocalToSceneTransform());
+//		System.out.print("\nDeploying : "+planeTransition.getDuration()+" seg. (plane:"+getId()+") -> ");nextZone.print();
+//		System.out.println(this.getLocalToSceneTransform());
 		BasicFunctions.sleep(planeTransition.getDuration()+2);
 		planeTransition.getTransition().setOnFinished(event -> {
-			System.out.print("\nbefore : "); print();
-			this.setXY(getX()+getTranslateX(), getY()+getTranslateY());
-		    this.setTranslateX(0);
-		    System.out.print("after : "); print();
-		    this.setTranslateY(0);
+//			System.out.print("\nbefore : "); print();
+//			this.setXY(getX()+getTranslateX(), getY()+getTranslateY());
+//		    this.setTranslateX(0);
+//		    System.out.print("after : "); print();
+//		    this.setTranslateY(0);
 		});
 	}
 	

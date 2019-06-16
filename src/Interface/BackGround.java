@@ -4,22 +4,27 @@ import GameElements.Air;
 import GameElements.AirCraft;
 import GameElements.AirPort;
 import GameElements.Plane;
-import GameElements.Tuple;
-import Listas.Nodo;
 import Listas.NodoList;
 import Others.BasicFunctions;
-import javafx.scene.Node;
+import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 
 public class BackGround {
 	
-	/*Atributes*/
-	private int TankSpeed=5, alive=0, slayed=0, risk=0;
-    private NodoList<Air> airList = new NodoList<>();
-    private NodoList<AirPort> airportsList = new NodoList<>();
-    private NodoList<Plane> planesList = new NodoList<>();
-    private AirPort lastPort = null;
+		@FXML private AnchorPane mapAnchorPane;
+	    @FXML private Text aliveText;
+	    @FXML private Text  slayedText; 
+		
+		/*Atributes*/
+		private int alive=0, slayed=0, risk=0;
+	    private NodoList<Air> airList = new NodoList<>();
+	    private NodoList<AirPort> airportsList = new NodoList<>();
+	    private NodoList<Plane> planesList = new NodoList<>();
+	    private AirPort lastPort = null;
     
-    /*Constructor*/
+
+	/*Constructor*/
 	public BackGround() {
 		setTerritory();
 	}
@@ -64,6 +69,7 @@ public class BackGround {
     
     //buscar airport
     public AirPort searchAirPort() {
+//    	return airportsList.get(0);
     	int i =0;
     	NodoList<AirPort> vacios = new NodoList<AirPort>();
     	while (i<airportsList.getLargo()) {
@@ -76,7 +82,7 @@ public class BackGround {
     }//random airport
     private AirPort randomAirport(NodoList<AirPort> vacios) {
     	int random = BasicFunctions.getRandomNum(airportsList.getLargo()-1);
-    	System.out.println("random "+random);
+//    	System.out.println("random "+random);
     	if (lastPort!=null && lastPort.equals(airportsList.get(random))) return null;
     	lastPort = airportsList.get(random);
     	return airportsList.get(random); 
@@ -91,15 +97,11 @@ public class BackGround {
     
     
 	/*Getters*/
-    public int getAlive() {
-		return alive;
+	public int getRisk() {
+		return risk;
 	}
-	public int getSlayed() {
-		return slayed;
-	}
-	public int getTankSpeed() {
-		return TankSpeed;
-	}
+	
+	//lists
 	public NodoList<AirPort> getAirports() {
 		return airportsList;
 	}
@@ -109,34 +111,67 @@ public class BackGround {
 	public NodoList<Plane> getPlanes() {
 		return planesList;
 	}
-	public int getRisk() {
-		return risk;
+
+	//map
+    public AnchorPane getAnchorPane() {
+			return mapAnchorPane;
 	}
+    
+    //scores
+    public int getAlive() {
+		return alive;
+	}
+	public int getSlayed() {
+		return slayed;
+	}
+	public Text getAliveText() {
+		return aliveText;
+	}
+	public Text getSlayedText() {
+		return slayedText;
+	}
+	public int getTankSpeed() {
+		int TankSpeed = BasicFunctions.getRandomNum(10);
+		return TankSpeed;
+	}
+
 	
 	
 	
 	/*Setters*/
-	public void setAlive() {
-		this.alive+=1;
-	}
-	public void setSlayed() {
-		this.slayed+=1;
-	}
-	public void setTankSpeed(int TankSpeed) {
-		this.TankSpeed = TankSpeed;
-	}
 	public void setRisk(int risk) {
 		this.risk = risk;
 	}
-
-  public void setCurrent(Air zone, Plane plane) {
-	for (int i =0; i<airList.getLargo(); i++) {
-		if (airList.get(i).getId().equals(zone.getId())) {
-			airList.get(i).setPlane(plane);
-			return;	
-		}
+	public void setCurrent(Air zone, Plane plane) {
+		for (int i =0; i<airList.getLargo(); i++) {
+			if (airList.get(i).getId().equals(zone.getId())) {
+				airList.get(i).setPlane(plane);
+				return;}}
 	}
-  }
+	
+	//map
+	public void setAnchorPane(AnchorPane mapAnchorPane) {
+		this.mapAnchorPane = mapAnchorPane;
+	}
+	
+    //scores
+	public void setAliveText(Text aliveText) {
+		this.aliveText = aliveText;
+	}
+	public void setSlayedText(Text slayedText) {
+		this.slayedText = slayedText;
+	}
+	public void setAlive() {
+		this.alive+=1;
+    	this.aliveText.setText(String.valueOf(alive));
+	}
+	public void setSlayed() {
+		this.alive-=1;
+		this.slayed+=1;
+		this.aliveText.setText(String.valueOf(alive));
+		this.slayedText.setText(String.valueOf(slayed));
+	}
+
 
 
     

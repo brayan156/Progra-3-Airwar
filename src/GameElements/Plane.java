@@ -5,6 +5,9 @@ import java.util.Random;
 
 import Interface.Controller;
 import Interface.Transition;
+import Listas.Nodo;
+import Listas.NodoList;
+import Listas.Vertice;
 import Others.BasicFunctions;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -15,16 +18,15 @@ public class Plane extends ImageView {
 		private static final int TimeOut = BasicFunctions.ParseInt(BasicFunctions.getPropertyKey("flyOutTime"));
 		private Random random = new Random();
 		private boolean done = true;
-
-		double posx;
-		double posy;
+		private NodoList<Vertice> ruta = null;
+		double posx, posy;
 		private long flyOutTime=0;
 		private String img,url;
 		private boolean Alive = true;
     	private Transition planeTransition = new Transition(this);
 		private Air air = null;
 		private Tooltip tooltip = new Tooltip("loading...");
-		private int rangox,rangoy;
+		private int rangox,rangoy, vertice;
     
 	/*Constructor*/
     public Plane(double x, double y) {
@@ -63,9 +65,9 @@ public class Plane extends ImageView {
 	}
 
 	//dibujo avion
-    public void draw(AnchorPane anchorPane) {
+    public void draw( ) {
     	createimg();
-    	try {anchorPane.getChildren().add(this);}
+    	try {Controller.background.getAnchorPane().getChildren().add(this);}
     	catch(IllegalStateException i) {
     		System.out.println("\rNO SE DIBUJA AVION");
     		i.printStackTrace();
@@ -127,6 +129,16 @@ public class Plane extends ImageView {
 	}
 
 
+	public NodoList<Vertice> getRuta() {
+		return ruta;
+	}
+
+
+	public int getVertice() {
+		return vertice;
+	}
+
+
 	/*Setters*/
 	public void setXY(double X, double Y) {
 		this.posx = X;
@@ -154,7 +166,6 @@ public class Plane extends ImageView {
 //		System.out.print("To   : ");nextZone.print();
 		done=false;
 		planeTransition.setTo(nextZone.getPosx(), nextZone.getPosy());
-		setTooltipText(prevZone, nextZone);
 		planeTransition.start(); /*start animation*/
 //		System.out.println(planeTransition.getTransition().getToX());
 //		System.out.println(planeTransition.getTransition().getToY());
@@ -178,11 +189,35 @@ public class Plane extends ImageView {
 	public void setTooltip(Tooltip tooltip) {
 		this.tooltip = tooltip;
 	}
-	public void setTooltipText(Air prev, Air next) {
-		String str = "Plane "+getId() + " | "+ prev.getShortDetails() + " -> " + next.getShortDetails();
+	public void setTooltipText(NodoList<Vertice> ruta, String id) {
+		String zones = setTooltipText(id);
+		String str = "Plane "+getId() + " | "+ zones;
 		this.tooltip.setText(str);
 	}
+	private String setTooltipText(String id) {
+		Nodo<Vertice> tmp = ruta.getHead();
+		String str = "";
+		while(tmp!=null) {
+			String zone = tmp.getNodo().getZone().getId();
+			
+			if(str.equals("")) {
+				if (id!=null && id==zone) {str = zone+"** ";}
+				else {str = zone;}
+			}else {
+				if (id!=null && id==zone) {str = str + " -> "+ zone+"**";}
+				else {str = zone;}
+			}tmp = tmp.getNext();
+		}return str;
+	}
+	
+	public void setRuta(NodoList<Vertice> ruta) {
+		this.ruta = ruta;
+	}
 
+
+	public void setVertice(int vertice) {
+		this.vertice = vertice;
+	}
 
 
 

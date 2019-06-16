@@ -53,6 +53,7 @@ public class Graph {
         	route.addLast(source);
             return route;
         }
+        System.out.println(source.getEdges());
         for (int i=0; i<source.getEdges().getLargo(); i++) {
         	Edge edge = source.getEdges().get(i);
             if (hasPathDFS(edge.getDestination(), destination, visited, route) != null) {

@@ -199,7 +199,7 @@ public class Controller {
             AirPort airport = Controller.background.searchAirPort();
             if (airport==null) {return;}
             else if (Controller.background.getAlive() == 6) {System.out.println("MAXIMO DE AVIONES EN PANTALLA (6)"); return;}
-            airport.generatePlane(mapAnchorPane);
+            airport.generatePlane();
             System.out.print("Plane Succesfully Created in : "); airport.print();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);

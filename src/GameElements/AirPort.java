@@ -19,14 +19,13 @@ public class AirPort extends Air {
 		super(x, y);
 	}
 	
-    public void generatePlane(AnchorPane mapAnchorPane) {
+    public void generatePlane() {
     	if (!this.isEmpty()) return;
     	//actualizar avion del aereopuerto.
     	this.plane = new Plane(this.posx, this.posy);
     	plane.setCurrentZone(this);
     	schAnim = new TimeAnimation(plane); //animacion
-    	
-	    plane.draw(mapAnchorPane); //dibujar
+	    plane.draw(); //dibujar
 //	    animation();
 	    //funciones..
 	    updateStats();

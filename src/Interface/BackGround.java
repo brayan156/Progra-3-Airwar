@@ -31,40 +31,9 @@ public class BackGround {
 
 	/*Constructor*/
 	public BackGround() {
-		pormientras();
-//		setTerritory();
+		setTerritory();
 	}
-	
-	//GENERAR AIRZONES
-    private void setTerritory() {
-    	for(int i=0; i<4; i++) {
-    		//posiciones random...
-    		double x  = BasicFunctions.getRandomNum(900)+50;
-    		double y  = BasicFunctions.getRandomNum(700)+50;
-    		//Air del vertice
-    		AirPort airport = new AirPort(x, y);
-    		airportsList.addLast(airport);
-    		airList.addLast(airport);
-    		//Vertice
-    		Vertice vertice = new Vertice(airport);
-    		verticeList.addLast(vertice);
-//    		System.out.println(vertice.toString());
-    	}
-    	for(int i=0; i<3; i++) {
-    		//posiciones random...
-    		double x  = BasicFunctions.getRandomNum(900)+50;
-    		double y  = BasicFunctions.getRandomNum(700)+50;
-    		//Air del vertice
-    		AirCraft aircraft = new AirCraft(x, y);
-    		airList.addLast(aircraft);
-    		//Vertice
-    		Vertice vertice = new Vertice(aircraft);
-    		verticeList.addLast(vertice);
-//    		System.out.println(vertice.toString());
-    	}
-    	setGraph();
-    }
-    //acomodar grafo
+	//OBTENER GRAFO
     private void setGraph() {
     	this.graph = new Graph();
     	for(int i=0; i<verticeList.getLargo(); i++) {
@@ -75,58 +44,66 @@ public class BackGround {
     	if (ruta==null){System.out.println("No hay ruta ->" +ruta); return;}
     	ruta.print();
     }
-    
-    private void pormientras() {
-		//Air del vertice
-		AirPort airport1 = new AirPort(30, 60);
-		AirPort airport2 = new AirPort(300, 200);
-		AirPort airport3 = new AirPort(500, 500);
-		AirCraft aircraft1 = new AirCraft(25, 300);
-		AirCraft aircraft2 = new AirCraft(400, 700);
-		AirCraft aircraft3 = new AirCraft(200, 476);
-		airportsList.addLast(airport1);
-		airportsList.addLast(airport2);
-		airportsList.addLast(airport3);
-		airList.addLast(airport1);
-		airList.addLast(airport2);
-		airList.addLast(airport3);
-		airList.addLast(aircraft1);
-		airList.addLast(aircraft2);
-		airList.addLast(aircraft3);
-		//Vertice
-		Vertice vertice1 = new Vertice(aircraft1);
-		Vertice vertice2 = new Vertice(aircraft2);
-		Vertice vertice3 = new Vertice(aircraft3);
-		Vertice vertice4 = new Vertice(airport1);
-		Vertice vertice5 = new Vertice(airport2);
-		Vertice vertice6 = new Vertice(airport3);
-		verticeList.addLast(vertice1);
-		verticeList.addLast(vertice2);
-		verticeList.addLast(vertice3);
-		verticeList.addLast(vertice4);
-		verticeList.addLast(vertice5);
-		verticeList.addLast(vertice6);
-//		System.out.println(vertice1.toString());
-//		System.out.println(vertice2.toString());
-//		System.out.println(vertice3.toString());
-//		System.out.println(vertice4.toString());
-//		System.out.println(vertice5.toString());
-//		System.out.println(vertice6.toString());
-		//edges
-		vertice1.addEdge(new Edge(vertice1, vertice2, 100));
-		vertice1.addEdge(new Edge(vertice1, vertice3, 90));
-        vertice2.addEdge(new Edge(vertice2, vertice4, 350));
-        vertice2.addEdge(new Edge(vertice2, vertice3, 150));
-        vertice2.addEdge(new Edge(vertice2, vertice5, 340));
-        vertice2.addEdge(new Edge(vertice2, vertice1, 100));
-        vertice3.addEdge(new Edge(vertice3, vertice1, 90));
-        vertice3.addEdge(new Edge(vertice3, vertice4, 100));
-        vertice4.addEdge(new Edge(vertice4, vertice5, 20));
-        vertice4.addEdge(new Edge(vertice4, vertice2, 350));
-        vertice5.addEdge(new Edge(vertice5, vertice1, 350));
-		setGraph();
+	//GENERAR AIRZONES
+    private void setTerritory() {
+		Vertice first = null;
+    	for(int i=0; i<4; i++) {
+    		//posiciones random...
+    		double x  = BasicFunctions.getRandomNum(900)+50;
+    		double y  = BasicFunctions.getRandomNum(700)+50;
+    		//Air del vertice
+    		AirPort airport = new AirPort(x, y);
+    		airportsList.addLast(airport);
+    		airList.addLast(airport);
+    		//Vertice
+    		if (i==0) {
+	    		first = new Vertice(airport);
+	    		verticeList.addLast(first);
+    		}else {
+        		Vertice vertice1 = new Vertice(airport);
+        		Vertice vertice2 = getRandomVertice();
+        		vertice1.addEdge(new Edge(vertice1, vertice2, getDistance(vertice1, vertice2)));
+        		verticeList.addLast(vertice1);
+//        		System.out.println(vertice1.toString());
+    		}
+    	}
+    	for(int i=0; i<3; i++) {
+    		//posiciones random...
+    		double x  = BasicFunctions.getRandomNum(900)+50;
+    		double y  = BasicFunctions.getRandomNum(700)+50;
+    		//Air del vertice
+    		AirCraft aircraft = new AirCraft(x, y);
+    		airList.addLast(aircraft);
+    		//Vertice
+    		Vertice vertice1 = new Vertice(aircraft);
+    		Vertice vertice2 = getRandomVertice();
+    		vertice1.addEdge(new Edge(vertice1, vertice2, getDistance(vertice1, vertice2)));
+    		verticeList.addLast(vertice1);
+//    		System.out.println(vertice1.toString());
+    	}
+		Vertice vertice2 = getRandomVertice();
+    	first.addEdge(new Edge(first, vertice2, getDistance(first, vertice2)));
+		verticeList.addLast(first);
+//		System.out.println(first.toString());
+    	setGraph();
     }
-    
+    //random vertice de la lista.
+    private Vertice getRandomVertice() {
+    	if (verticeList.getLargo()-1==0) return verticeList.get(0);
+    	int random = BasicFunctions.getRandomNum(verticeList.getLargo()-1);
+    	return verticeList.get(random);
+    }
+    //calcular distancia entre los nodos.
+    private double getDistance(Vertice vertice1, Vertice vertice2) {
+		//formula de distancia entre dos puntos de un plano y pitagoras.
+		double distanciaEnX = Math.abs(vertice2.getZone().getPosx() - vertice1.getZone().getPosx());
+		double distanciaEnY = Math.abs(vertice2.getZone().getPosy() - vertice1.getZone().getPosy());
+		double hipotenusa = Math.sqrt(Math.pow(distanciaEnX, 2)+Math.pow(distanciaEnY, 2));
+//		System.out.println("Distancia en X > "+ distanciaEnX+ "Distancia en Y > "+ distanciaEnY);
+		System.out.println("Hipotenusa > "+hipotenusa);
+    	return hipotenusa;
+    }
+
     
     /*metodos para buscar por medio de grafos*/
     //buscar zone

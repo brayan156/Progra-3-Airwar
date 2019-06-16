@@ -14,7 +14,8 @@ public class Air extends ImageView {
 	public Air(double x, double y) {
 		this.posx = x;
 		this.posy = y;
-		this.setId(String.valueOf(idCounter));	idCounter+=1;
+		idCounter+=1;
+		this.setId(String.valueOf(idCounter));	
 	}
 	
 	public void receivePlane(Plane plane) {

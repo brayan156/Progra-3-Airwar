@@ -1,9 +1,10 @@
 package GameElements;
 
+
 import Interface.Controller;
 import Loops.TimeSchedule;
 import Loops.TimerAnimation;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Tooltip;
 
 public class AirPort extends Air {
 	/*Atributes*/	
@@ -16,26 +17,31 @@ public class AirPort extends Air {
 		super(x, y);
 	}
 	
-    public boolean generatePlane(AnchorPane anchor) {
-    	if (!this.isEmpty()) return false; 
-    	
-    	//aeropuerto en que se crea manda sus posiciones.
+    public void generatePlane() {
+    	if (!this.isEmpty()) return;
+    	//actualizar avion del aereopuerto.
     	this.plane = new Plane(this.posx, this.posy);
-    	this.plane.setCurrentZone(this);
-    	
-    	//agregar animacion
-	    schAnim = new TimeSchedule(new TimerAnimation(plane), plane);
+    	plane.setCurrentZone(this);
+    	schAnim = new TimeSchedule(new TimerAnimation(plane), plane); //animacion
+	    plane.draw(Controller.background.getAnchorPane()); //dibujar
 	    
-	    //dibujar
-	    plane.draw(anchor);
-	    
-    	//agregar a la lista de aviones
-	    Controller.background.addPlane(plane);
-	    
-	    System.out.println("\rNUM. PLANES: "+Controller.background.getPlanes().getLargo());
-//	    Controller.background.getPlanes().print();
-	    return true;
+	    //funciones..
+	    updateStats();
+	    showDetails();
     }
+    
+    
+    public void updateStats() {
+	    Controller.background.addPlane(plane);	//agregar a la lista de aviones
+	    Controller.background.setAlive();
+    }
+    
+    
+    public void showDetails() {
+//    	System.out.println("\rNUM. PLANES: "+Controller.background.getPlanes().getLargo());
+//    	Controller.background.getPlanes().print();
+    }
+    
     
     public void print() {
     	System.out.println(toString());

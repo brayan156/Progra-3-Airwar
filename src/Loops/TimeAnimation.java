@@ -32,7 +32,8 @@ public class TimeAnimation {
 	
 	public void toDo(){
 		Air zone = Controller.background.search();
-		if (zone.equals(plane.getCurrentZone())) {toDo(); return;}
+		if (zone == null) {System.out.println("[ Puerto es null ] : Line35-Controller"); return;}
+		else if (zone.equals(plane.getCurrentZone())) {toDo(); return;}
 		if(plane.getTransitionDone()) {
 //			System.out.println("terminado "+ plane.getId());
 			plane.setTransition(plane.getCurrentZone(),zone);}

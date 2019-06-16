@@ -68,10 +68,10 @@ public class NodoList <T> {
 	
 	@Override
 	public String toString() {
-		String str=">> LIST <<";
+		String str="";
     	Nodo<T> tmp = this.head;
     	while (tmp != null) {
-    		str = str+"\n|||"+tmp.getNodo().toString();
+    		str = "\n| "+tmp.getNodo().toString()+"  |"+str;
     		tmp = tmp.next;
     	}
     	return str;

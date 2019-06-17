@@ -15,8 +15,8 @@ public class AirPort extends Air {
     
     
 	/*Constructor*/
-	public AirPort(double x, double y) {
-		super(x, y);
+	public AirPort(double x, double y, char id) {
+		super(x, y, id);
 	}
 	
     public void generatePlane() {
@@ -61,7 +61,7 @@ public class AirPort extends Air {
     
 	@Override
 	public String toString() {
-		String str = "[Port : "+getId()+"] ("+posx+","+posy+")";
+		String str = "[Port : "+getid()+"] ("+posx+","+posy+")";
 		return str;
 	}
 	

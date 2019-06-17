@@ -2,18 +2,25 @@ package GameElements;
 
 public class ruta {
     public char inicio, fin;
-    public double distancia,peligro,peso;
+    public double distancia,peligro,peso, pesoair;
 
-    public ruta(char inicio, char fin, double distancia) {
+    public ruta(char inicio, char fin, double distancia, Boolean esairport1, Boolean esairport2) {
         this.inicio = inicio;
         this.fin = fin;
         this.distancia = distancia;
-        this.peso = distancia;
+        pesoair=0;
+        sumartipoair(esairport1);
+        sumartipoair(esairport2);
+        this.peso = distancia+this.pesoair;
     }
 
     public void bajarpeligro (){
         peligro-=10;
         peso-=10;
+    }
+    private void sumartipoair(Boolean esairport){
+        if (esairport){pesoair+=50;}
+        else {pesoair+=100;}
     }
 
     public char getInicio() {
@@ -38,7 +45,7 @@ public class ruta {
 
     public void setPeligro(double peligro) {
         this.peligro = peligro;
-        this.peso=this.distancia+this.peligro;
+        this.peso=this.distancia+this.peligro+this.pesoair;
     }
 
     public double getPeso() {

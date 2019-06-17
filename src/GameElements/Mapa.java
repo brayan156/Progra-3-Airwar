@@ -1,6 +1,6 @@
 package GameElements;
 
-import java.awt.*;
+import Others.BasicFunctions;
 
 public class Mapa {
     double x1,x2,x3,y1,y2,y3;
@@ -28,4 +28,38 @@ public class Mapa {
         else if (x>x3 && y>y3){return "cont3";}
         else {return "agua";}
     }
+    
+    
+    public Double[] getTierra() {
+		int continente = BasicFunctions.getRandomNum(2)+1;
+//		System.out.println("Continente :" +continente);
+		double x,y = 0;
+		if (continente == 1) {			
+			x = BasicFunctions.getRandomNum(x1);
+			y = BasicFunctions.getRandomNum(y1);
+		}
+		else if (continente == 2) {
+			x = BasicFunctions.getRandomNum(x2-x1)+x1;
+			y = BasicFunctions.getRandomNum(y2-y1)+y1;
+		}
+		else {
+			x = BasicFunctions.getRandomNum(x3-x2)+x2;
+			y = BasicFunctions.getRandomNum(y3-y2)+y3;
+		}
+    	String[] var = (x+","+y).split(",");
+    	Double[] dob = new Double[2];
+    	dob[0]= Double.parseDouble(var[0]);
+    	dob[1]= Double.parseDouble(var[1]);
+    	return dob;
+    }
+	public Double[] getAgua() {
+		int x,y = 0;
+		x = BasicFunctions.getRandomNum(600);
+		y = BasicFunctions.getRandomNum(500);
+    	String[] var = (x+","+y).split(",");
+    	Double[] dob = new Double[2];
+    	dob[0]= Double.parseDouble(var[0]);
+    	dob[1]= Double.parseDouble(var[1]);
+    	return dob;
+	}
 }

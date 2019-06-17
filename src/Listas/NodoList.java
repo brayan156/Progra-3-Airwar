@@ -29,8 +29,6 @@ public class NodoList <T> {
     }
 	public void eliminar(T t){
 		if (this.head.getNodo().equals(t)){
-			System.out.println(t);
-			System.out.println(this.head);
 			this.head=this.head.next;
 			largo-=1;
 		}
@@ -38,8 +36,6 @@ public class NodoList <T> {
 			Nodolista<T> tmp=this.head;
 			while (tmp.next!=null){
 				if (tmp.next.getNodo().equals(t)){
-					System.out.println(t);
-					System.out.println(tmp);
 					tmp.next=tmp.next.next;
 					largo-=1;
 					break;

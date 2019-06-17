@@ -11,6 +11,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -31,7 +32,8 @@ public class Controller {
 	    @FXML private ProgressBar powerProgressBar = new ProgressBar();
 	    @FXML private Text aliveText =  new Text(); 
 	    @FXML private Text  slayedText =  new Text(); 
-	    @FXML private Text  countText =  new Text(); 
+	    @FXML private Text  countText =  new Text();
+	    @FXML private Label labelpesos= new Label();
 	    //game backgrounds elements
 	    public static BackGround background = new BackGround();
 	    private int count;
@@ -43,24 +45,55 @@ public class Controller {
             public void handle(long now) {
                 try {
 					timepeligrof = System.currentTimeMillis()-timepeligroi;
-                    int cont;
-                    for (cont=0;cont<listabala.getLargo();cont++){
-                        Bala bala=listabala.get(cont);
-                        bala.setY(bala.getY()-bala.getVelocidad());
-                        if (bala.getY()<-30){listabala.eliminar(bala);mapAnchorPane.getChildren().remove(bala);}
-                    }
+					moverbalas();
+					marcarcaminoslabel();
                     verificarchoque();
                     if (timepeligrof>6000){
                     	bajarpeligrosidad();
                     	timepeligroi=System.currentTimeMillis();
 					}
+                    actualizarlabel();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         };
-    
-    private void verificarchoque(){
+
+	private void actualizarlabel() {
+		labelpesos.setText("Pesos de los caminos:");
+		NodoList<Ruta> caminos =background.caminos;
+		for (int n=0; n<caminos.getLargo(); n++){
+			Ruta tmp=caminos.get(n);
+			labelpesos.setText(labelpesos.getText()+"\n"+tmp.getInicio()+"-"+tmp.getFin()+": "+(int)tmp.getPeso());
+		}
+	}
+
+	public  void marcarcaminoslabel(){
+		NodoList<Label> labels=background.labels;
+		for (int cont=0;cont<labels.getLargo();cont++){
+			Label label =labels.get(cont);
+			Plane plane=background.getPlanes().get(cont);
+			label.setLayoutX(plane.getrealx()+40);
+			label.setLayoutY(plane.getrealy()+40);
+			label.setText(plane.print(plane.getCamino(),(char)0));
+			if (!mapAnchorPane.getChildren().contains(label)){
+				mapAnchorPane.getChildren().add(label);
+				System.out.println("añado label al map");
+			}
+		}
+	}
+
+	public void moverbalas(){
+		int cont;
+		for (cont=0;cont<listabala.getLargo();cont++){
+			Bala bala=listabala.get(cont);
+			bala.setY(bala.getY()-bala.getVelocidad());
+			if (bala.getY()<-30){listabala.eliminar(bala);mapAnchorPane.getChildren().remove(bala);}
+		}
+	}
+
+
+	private void verificarchoque(){
     	NodoList<Plane> aviones= background.getPlanes();
     	int i,j;
     	for (i=0; i<aviones.getLargo();i++) {
@@ -79,6 +112,9 @@ public class Controller {
 						}catch (NullPointerException e){
 							System.out.println("no tengo ruta aun");
 						}
+						Label label=background.labels.get(i);
+						mapAnchorPane.getChildren().remove(label);
+						background.labels.eliminar(label);
 						mapAnchorPane.getChildren().remove(bala);
 						aviones.eliminar(avion);
 						listabala.eliminar(bala);
@@ -232,8 +268,8 @@ public class Controller {
     
     //generate loop
     private void gentrTask() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(6), generate -> {
-            if (Controller.background.getAlive() == 1) {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(4), generate -> {
+            if (Controller.background.getAlive() == 8) {
             	System.out.println("MAXIMO DE AVIONES EN PANTALLA (8)"); 
             	countText.setText(0+" s");
             	return;}
@@ -250,7 +286,7 @@ public class Controller {
     private void countdownTask() {
     	this.count=2;
     	Timeline cd = new Timeline(new KeyFrame(Duration.seconds(1), write -> {
-            if (Controller.background.getAlive() == 1) {
+            if (Controller.background.getAlive() == 8) {
             	countText.setText(0+" s");
             	return;}
     		countText.setText(count+" s");

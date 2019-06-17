@@ -10,6 +10,7 @@ public class Ruta {
         this.fin = fin;
         this.distancia = distancia;
         pesoair=0;
+        peligro=0;
         sumartipoair(esairport1);
         sumartipoair(esairport2);
         this.peso = distancia+this.pesoair;
@@ -51,7 +52,7 @@ public class Ruta {
     }
 
     public void setPeligro(double peligro) {
-        this.peligro = peligro;
+        this.peligro += peligro;
         this.peso=this.distancia+this.peligro+this.pesoair;
     }
 

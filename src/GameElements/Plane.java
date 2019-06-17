@@ -74,15 +74,17 @@ public class Plane extends ImageView {
 	public String print(NodoList<Character> camino, char id) {
 		String str= "";
 		for (int i=0; i<camino.getLargo(); i++) {
-			
-			str=str+" -> "+camino.get(i);
+			if (i==0){str = str + camino.get(i);}
+			else {
+				str = str + " -> " + camino.get(i);
+			}
 			if (id == camino.get(i)) {
 				str=str+"*";
 			}
 		}
 //		System.out.println("CAMINO: "+str.substring(4));
 
-		return str.substring(4);
+		return str;
 	}
 
 

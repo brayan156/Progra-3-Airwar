@@ -10,6 +10,7 @@ import Listas.NodoList;
 import Listas.Nodolista;
 import Others.BasicFunctions;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -34,6 +35,8 @@ public class BackGround {
 		public NodoList<Ruta> caminos=new NodoList<>();
 		private Mapa mapa=new Mapa();
 		public NodoList<Line> lineas=new NodoList<>();
+		public NodoList<Label> labels=new NodoList<>();
+
     
 
 	/*Constructor*/
@@ -118,6 +121,7 @@ public class BackGround {
     		Air air2=nodes.get(1);
     		Ruta camino1=crearcamino(air,air1);
     		Ruta camino2=crearcamino(air,air2);
+    		System.out.println(air.getid()+","+air1.getid()+","+air2.getid());
     		pintarlinea(air.getPosx()+20,air1.getPosx()+20,air.getPosy()+20,air1.getPosy()+20);
 			pintarlinea(air.getPosx()+20,air2.getPosx()+20,air.getPosy()+20,air2.getPosy()+20);
     		graph.agregarRuta(air.getid(), air1.getid(), (int) camino1.getPeso());
@@ -172,14 +176,15 @@ public class BackGround {
     	while(true) {
     		tmp1 = randomAir(random);
     		tmp2 = randomAir(random);
-    		if (tmp1!=air  &&  tmp2!=air  &&  tmp1!=tmp2);
-    			nodes.addLast(tmp1);
-    			nodes.addLast(tmp2);
-    			break;
+    		if (tmp1.getid()!=air.getid()  &&  tmp2.getid()!=air.getid()  &&  tmp1.getid()!=tmp2.getid()) {
+				nodes.addLast(tmp1);
+				nodes.addLast(tmp2);
+				break;
+			}
     	}
     	return nodes;
     }private Air randomAir(Random random) {
-    	int r = random.nextInt(airList.getLargo()-1);
+    	int r = BasicFunctions.getRandomNum(airList.getLargo()-1);
     	return airList.get(r);
     }
 
@@ -195,7 +200,8 @@ public class BackGround {
     
     //ADD AVION
     public void addPlane(Plane plane) {
-		this.planesList.addLast(plane);;
+		this.planesList.addLast(plane);
+		this.labels.addLast(new Label());
 	}
     
     //SEARCH AIR

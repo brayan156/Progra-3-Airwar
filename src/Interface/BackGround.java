@@ -62,29 +62,23 @@ public class BackGround {
 		//iteracion para generar puertos
     	for(int i=0; i<21; i++) {
     		Boolean encima=true;
-			double x=0;
-			double y=0;
+			Double[] area = null;
     		while (encima) {
-				x = BasicFunctions.getRandomNum(900) + 50;
-				y = BasicFunctions.getRandomNum(700) + 50;
-				encima = encimadeotroair(x, y);
+    			if (i%2==0) area = mapa.getTierra();
+    			else area = mapa.getAgua();
+//    			System.out.println(area[0]+" "+area[1]);
+				encima = encimadeotroair(area[0], area[1]);
 			}
+			System.out.println(area[0]+" "+area[1]);
+//    		System.out.println(encima);
     		if (i%2==0) {
-    			/*logica de 
-    			 * para 
-    			 * obtener 
-    			 * x y y*/
-    			AirPort airport = new AirPort(x, y, this.arrayLetras.get(i));
+    			AirPort airport = new AirPort(area[0], area[1], this.arrayLetras.get(i));
     			//agregar en listas y string...
     			serieNodos = serieNodos+airport.getid();
         		airList.addLast(airport);
         		airportsList.addLast(airport);
     		}else {
-    			/*logica de 
-    			 * para 
-    			 * obtener 
-    			 * x y y*/
-    			AirCraft aircraft = new AirCraft(x, y, this.arrayLetras.get(i));
+    			AirCraft aircraft = new AirCraft(area[0], area[1], this.arrayLetras.get(i));
     			//agregar en listas y string...
     			serieNodos = serieNodos+aircraft.getid();
         		airList.addLast(aircraft);    			

@@ -1,11 +1,9 @@
 package GameElements;
 
 
-import java.util.Random;
 
 import Interface.Controller;
 import Interface.Transition;
-import Listas.Nodo;
 import Listas.NodoList;
 import Others.BasicFunctions;
 import javafx.scene.control.Tooltip;
@@ -22,7 +20,6 @@ public class Plane extends ImageView {
 		private String img,url;
 		private Transition planeTransition = new Transition(this);
 		double posx, posy;
-    	private Random random = new Random();
 		private int rangox,rangoy, onNode;
 		private NodoList<Character> camino = new NodoList<>();
 		private Tooltip tooltip = new Tooltip("loading... "+flyOutTime+"s");
@@ -159,7 +156,7 @@ public class Plane extends ImageView {
 
 
 	public void setFlyOutTime() {
-	    this.flyOutTime = BasicFunctions.getRandomNum(4)+2;
+	    this.flyOutTime = BasicFunctions.getRandomNum(TimeOut)+2;
 	    System.out.println("tiempo de salida= "+flyOutTime);
 	}
 

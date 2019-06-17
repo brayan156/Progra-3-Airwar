@@ -2,26 +2,26 @@ package Listas;
 
 public class NodoList <T> {
     int largo;
-    Nodo<T> head= null;
+    Nodolista<T> head= null;
 
 
     public void addLast (T e){
         if (this.head==null){
-            this.head= new Nodo<T>(e);
+            this.head= new Nodolista<T>(e);
             largo++;
         }
         else {
-            Nodo <T> tmp= this.head;
+            Nodolista<T> tmp= this.head;
             while (tmp.next!= null) {
                 tmp = tmp.next;
             }
-            tmp.next=new Nodo<>(e);
+            tmp.next=new Nodolista<>(e);
             largo++;
         }
     }
     
     public void addFirst(T e) {
-        Nodo<T> n = new Nodo<>(e);
+        Nodolista<T> n = new Nodolista<>(e);
         n.next=this.head;
         head=n;
         largo++;
@@ -34,7 +34,7 @@ public class NodoList <T> {
 			largo-=1;
 		}
 		else{
-			Nodo<T>tmp=this.head;
+			Nodolista<T> tmp=this.head;
 			while (tmp.next!=null){
 				if (tmp.next.getNodo().equals(t)){
 					System.out.println(t);
@@ -57,9 +57,9 @@ public class NodoList <T> {
 	}
     
     
-	public Nodo<T> getLast() {
+	public Nodolista<T> getLast() {
 		if (this.head==null) {return null;}
-		Nodo <T> tmp= this.head;
+		Nodolista<T> tmp= this.head;
         while (tmp.next!= null) {
             tmp = tmp.next;
         }return tmp;
@@ -68,7 +68,7 @@ public class NodoList <T> {
 	public void removeLast() {
 		if (this.head==null) {return;}
 		else if (this.head.next == null){ this.head=null; largo--; return;}
-		Nodo <T> tmp= this.head;
+		Nodolista<T> tmp= this.head;
         while (tmp.next.next!= null) {
             tmp = tmp.next;
         }tmp.next = null; largo--;
@@ -76,7 +76,7 @@ public class NodoList <T> {
 	
 
 	public boolean contains(T string) {
-    	Nodo<T> tmp = this.head;
+    	Nodolista<T> tmp = this.head;
     	while (tmp != null) {
     		if (tmp.getNodo().equals(string)) {
     			return true;
@@ -92,7 +92,7 @@ public class NodoList <T> {
 	@Override
 	public String toString() {
 		String str="";
-    	Nodo<T> tmp = this.head;
+    	Nodolista<T> tmp = this.head;
     	while (tmp != null) {
     		str = "\n| "+tmp.getNodo().toString()+"  |"+str;
     		tmp = tmp.next;
@@ -111,7 +111,7 @@ public class NodoList <T> {
 	}
  
     public T get(int index){
-    	Nodo<T> tmp = this.head;
+    	Nodolista<T> tmp = this.head;
 //		System.out.println("Largo "+largo);
     	int contador = 0;
     	while (tmp != null) {
@@ -133,11 +133,11 @@ public class NodoList <T> {
         this.largo = largo;
     }
 
-    public Nodo <T> getHead() {
+    public Nodolista<T> getHead() {
         return head;
     }
 
-    public void setHead (Nodo<T> head) {
+    public void setHead (Nodolista<T> head) {
         this.head = head;
     }
 	public void empty() {

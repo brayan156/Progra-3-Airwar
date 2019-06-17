@@ -5,7 +5,7 @@ import java.util.Random;
 
 import Interface.Controller;
 import Interface.Transition;
-import Listas.Nodo;
+import Listas.Nodolista;
 import Listas.NodoList;
 import Listas.Vertice;
 import Others.BasicFunctions;
@@ -195,7 +195,7 @@ public class Plane extends ImageView {
 		this.tooltip.setText(str);
 	}
 	private String setTooltipText(String id) {
-		Nodo<Vertice> tmp = ruta.getHead();
+		Nodolista<Vertice> tmp = ruta.getHead();
 		String str = "";
 		while(tmp!=null) {
 			String zone = tmp.getNodo().getZone().getId();

@@ -88,7 +88,7 @@ public class Controller {
 	/*initializer*/ 
     public void initialize() throws InterruptedException {
     	setGraphics();
-    	setMusic();
+//    	setMusic();
     	TankEvent(); 
     	drawAir();
     	gentrTask();

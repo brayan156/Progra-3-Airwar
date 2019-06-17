@@ -61,24 +61,21 @@ public class BackGround {
     	String serieNodos = "";
 		//iteracion para generar puertos
     	for(int i=0; i<21; i++) {
-    		Boolean encima=true;
-			Double[] area = null;
-    		while (encima) {
-    			if (i%2==0) area = mapa.getTierra();
-    			else area = mapa.getAgua();
-    			System.out.println("SIGUE WHILE : "+area[0]+" "+area[1]);
-				encima = encimadeotroair(area[0], area[1]);
-			}
-			System.out.println(area[0]+" "+area[1]);
-//    		System.out.println(encima);
+
     		if (i%2==0) {
-    			AirPort airport = new AirPort(area[0], area[1], this.arrayLetras.get(i));
+    			double[] par=obtenerrandomxy(true);
+    			double x=par[0];
+    			double y=par[1];
+    			AirPort airport = new AirPort(x, y, this.arrayLetras.get(i));
     			//agregar en listas y string...
     			serieNodos = serieNodos+airport.getid();
         		airList.addLast(airport);
         		airportsList.addLast(airport);
     		}else {
-    			AirCraft aircraft = new AirCraft(area[0], area[1], this.arrayLetras.get(i));
+				double[] par=obtenerrandomxy(false);
+				double x=par[0];
+				double y=par[1];
+    			AirCraft aircraft = new AirCraft(x, y, this.arrayLetras.get(i));
     			//agregar en listas y string...
     			serieNodos = serieNodos+aircraft.getid();
         		airList.addLast(aircraft);    			
@@ -87,6 +84,25 @@ public class BackGround {
     	System.out.println("SerieNodos: "+serieNodos);
     	setGraph(serieNodos);
     }
+    public double[] obtenerrandomxy(Boolean tierra){
+		double[] par=new double[2];
+		Boolean notengoparcorrecto=true;
+		Boolean encima=true;
+		double x=0;
+		double y=0;
+		while (notengoparcorrecto || encima) {
+			x = BasicFunctions.getRandomNum(900) + 50;
+			y = BasicFunctions.getRandomNum(700) + 50;
+			encima = encimadeotroair(x, y);
+			if (tierra && mapa.darcontinente(x,y).equals("agua")){notengoparcorrecto=true;}
+			else if (tierra && !mapa.darcontinente(x,y).equals("agua")){notengoparcorrecto=false;}
+			else if (!tierra && mapa.darcontinente(x,y).equals("agua")){notengoparcorrecto=false;}
+			else {notengoparcorrecto=true;}
+		}
+		par[0]=x;
+		par[1]=y;
+		return par;
+	}
     public boolean encimadeotroair(double x,double y){
 		int i;
 		for (i=0;i<airList.getLargo();i++) {

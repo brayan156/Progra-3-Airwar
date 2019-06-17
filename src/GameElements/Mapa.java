@@ -22,10 +22,10 @@ public class Mapa {
         }
         else {return true;}
     }
-    private String darcontinente (double x, double y){
-        if (x<x1 && y<y1){return "cont1";}
-        else if (x<x2 && y>y2){return "cont2";}
-        else if (x>x3 && y>y3){return "cont3";}
+    public String darcontinente (double x, double y){
+        if (x+20<x1 && y+20<y1){return "cont1";}
+        else if (x+20<x2 && y+20>y2){return "cont2";}
+        else if (x+20>x3 && y+20>y3){return "cont3";}
         else {return "agua";}
     }
     

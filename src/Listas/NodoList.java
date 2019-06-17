@@ -1,5 +1,6 @@
 package Listas;
 
+
 public class NodoList <T> {
     int largo;
     Nodolista<T> head= null;
@@ -144,4 +145,6 @@ public class NodoList <T> {
 		 this.head = null;
 		 largo = 0;
 	}
+
+
 }

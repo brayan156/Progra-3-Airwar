@@ -124,7 +124,7 @@ public class Controller {
     	        r.setFill(Color.GREEN);
     	        r.setStroke(Color.ORANGE);
     		}
-	        t.setText(zone.getId());
+	        t.setText(String.valueOf(zone.getid()));
 	        t.setStyle("-fx-text-fill: white; -fx-font-size: 25px;");
 	        r.setWidth(40);
 	        r.setHeight(40);
@@ -195,10 +195,13 @@ public class Controller {
     //generate loop
     private void gentrTask() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), generate -> {
-            countdownTask();
+            if (Controller.background.getAlive() == 8) {
+            	System.out.println("MAXIMO DE AVIONES EN PANTALLA (8)"); 
+            	countText.setText(0+" s");
+            	return;}
+        	countdownTask();
             AirPort airport = Controller.background.searchAirPort();
             if (airport==null) {return;}
-            else if (Controller.background.getAlive() == 6) {System.out.println("MAXIMO DE AVIONES EN PANTALLA (6)"); return;}
             airport.generatePlane();
             System.out.print("Plane Succesfully Created in : "); airport.print();
         }));
@@ -207,12 +210,15 @@ public class Controller {
     }
     
     private void countdownTask() {
-    	this.count=3;
+    	this.count=2;
     	Timeline cd = new Timeline(new KeyFrame(Duration.seconds(1), write -> {
+            if (Controller.background.getAlive() == 8) {
+            	countText.setText(0+" s");
+            	return;}
     		countText.setText(count+" s");
     		this.count-=1;
     	}));
-    	cd.setCycleCount(4);
+    	cd.setCycleCount(3);
     	cd.play();
     }
     

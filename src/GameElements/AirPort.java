@@ -5,7 +5,6 @@ import Interface.Controller;
 import Loops.TimeAnimation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 public class AirPort extends Air {
@@ -34,9 +33,8 @@ public class AirPort extends Air {
     
     public void animation() {
     	Timeline cd = new Timeline(new KeyFrame(Duration.seconds(plane.getFlyOutTime()), write -> {
-    		Air zone = Controller.background.search();
+    		Air zone = Controller.background.searchAir(plane.getCurrentZone());
     		System.out.println("todo");
-//    		if (zone.equals(plane.getCurrentZone())) {toDo(); return;}
     		plane.setTransition(plane.getCurrentZone(),zone);
     	}));
 //    	cd.setCycleCount(1);

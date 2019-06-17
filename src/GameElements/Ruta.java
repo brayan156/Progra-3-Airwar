@@ -1,10 +1,10 @@
 package GameElements;
 
-public class ruta {
+public class Ruta {
     public char inicio, fin;
     public double distancia,peligro,peso, pesoair;
 
-    public ruta(char inicio, char fin, double distancia, Boolean esairport1, Boolean esairport2) {
+    public Ruta(char inicio, char fin, double distancia, Boolean esairport1, Boolean esairport2) {
         this.inicio = inicio;
         this.fin = fin;
         this.distancia = distancia;
@@ -55,4 +55,12 @@ public class ruta {
     public void setPeso(double peso) {
         this.peso = peso;
     }
+    
+    
+	@Override
+	public String toString() {
+		String str = distancia+":{"+inicio+"~"+fin+"}";
+		return str;
+		
+	}
 }

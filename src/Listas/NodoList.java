@@ -2,7 +2,7 @@ package Listas;
 
 
 public class NodoList <T> {
-    int largo;
+    int largo=0;
     Nodolista<T> head= null;
 
 

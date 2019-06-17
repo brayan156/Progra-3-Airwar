@@ -4,16 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import GameElements.Air;
-import GameElements.AirCraft;
-import GameElements.AirPort;
-import GameElements.Plane;
+import GameElements.*;
 import Listas.Grafo;
 import Listas.NodoList;
 import Listas.Nodolista;
 import Others.BasicFunctions;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
 public class BackGround {
@@ -32,6 +31,9 @@ public class BackGround {
 	    private AirPort lastPort = null;
 		private List<Character> arrayLetras;
 		private Grafo graph;
+		public NodoList<Ruta> caminos=new NodoList<>();
+		private Mapa mapa=new Mapa();
+		public NodoList<Line> lineas=new NodoList<>();
     
 
 	/*Constructor*/
@@ -56,8 +58,14 @@ public class BackGround {
     	String serieNodos = "";
 		//iteracion para generar puertos
     	for(int i=0; i<21; i++) {
-    		double x  = BasicFunctions.getRandomNum(900)+50;
-    		double y  = BasicFunctions.getRandomNum(700)+50;
+    		Boolean encima=true;
+			double x=0;
+			double y=0;
+    		while (encima) {
+				x = BasicFunctions.getRandomNum(900) + 50;
+				y = BasicFunctions.getRandomNum(700) + 50;
+				encima = encimadeotroair(x, y);
+			}
     		if (i%2==0) {
     			/*logica de 
     			 * para 
@@ -82,6 +90,17 @@ public class BackGround {
     	System.out.println("SerieNodos: "+serieNodos);
     	setGraph(serieNodos);
     }
+    public boolean encimadeotroair(double x,double y){
+		int i;
+		for (i=0;i<airList.getLargo();i++) {
+			Air air=airList.get(i);
+			if (Math.abs(x - air.getPosx()) < 100 && Math.abs(y - air.getPosy()) < 100) {
+				return true;
+			}
+		}
+		return false;
+
+	}
     
 	//crear grafo
     private void setGraph(String serieNodos) {
@@ -94,43 +113,85 @@ public class BackGround {
 		Air air = null;
 		for(int i=0; i<airList.getLargo(); i++) {
     		air = airList.get(i);
-    		char[] nodes = getRandomAir(air);
-    		/*ver lo de las
-    		 *  distancias y
-    		 *   lo de donde
-    		 *    se dibujan 
-    		 *    los air*/
-    		graph.agregarRuta(air.getid(), nodes[0], 3);
-    		graph.agregarRuta(air.getid(), nodes[1], 3);
+    		NodoList<Air> nodes = getRandomAir(air);
+    		Air air1=nodes.get(0);
+    		Air air2=nodes.get(1);
+    		Ruta camino1=crearcamino(air,air1);
+    		Ruta camino2=crearcamino(air,air2);
+    		pintarlinea(air.getPosx()+20,air1.getPosx()+20,air.getPosy()+20,air1.getPosy()+20);
+			pintarlinea(air.getPosx()+20,air2.getPosx()+20,air.getPosy()+20,air2.getPosy()+20);
+    		graph.agregarRuta(air.getid(), air1.getid(), (int) camino1.getPeso());
+    		graph.agregarRuta(air.getid(), air2.getid(), (int) camino2.getPeso());
 		}
 	}
+	public void pintarlinea(double x1,double x2, double y3, double y4){
+		Line linea = new Line(x1,y3,x2,y4);
+		// Se asina el color de relleno de la linea
+		linea.setStroke(Color.STEELBLUE);
+		// Se indica el grosor que tendra nuestra linea
+		linea.setStrokeWidth(0.5);
+		// se indica el tipo de punta que tendra la linea
+		// se agrega la linea al Scene.
+		lineas.addLast(linea);
+	}
+	private Ruta crearcamino(Air air,Air air1){
+		Ruta camino;
+		for(int i=0; i<caminos.getLargo(); i++) {
+			Ruta tmp=caminos.get(i);
+			if ((tmp.inicio==air.getid() && tmp.fin==air1.getid()) || (tmp.inicio==air1.getid() && tmp.fin==air.getid())){
+				return tmp;
+			}
+		}
+		double distancia = this.getDistance(air, air1);
+		if (mapa.interoceanica(air.getPosx(), air.getPosy(), air1.getPosx(), air1.getPosy())) {
+			camino = new Ruta(air.getid(), air1.getid(), distancia + 200, soyAirport(air), soyAirport(air1));
+		} else {
+			camino = new Ruta(air.getid(), air1.getid(), distancia, soyAirport(air), soyAirport(air1));
+		}
+		caminos.addLast(camino);
+		return camino;
+	}
+	public void cambiarpeso(char i, char f, Ruta camino){
+//		System.out.println("voy a cambiar peligrosidad");
+//		System.out.println(graph.encontrarRutaMinimaDijkstra(i,f));
+		graph.agregarRuta(i,f,(int) camino.getPeso());
+//		System.out.println(graph.encontrarRutaMinimaDijkstra(i,f));
+	}
+	private Boolean soyAirport(Air air){
+		for(int i=0; i<airportsList.getLargo(); i++) {
+			if (airportsList.get(i).getid()==air.getid()){
+				return true;
+			}
+		}
+		return false;
+	}
 	//array con dos random air diferentes al original y diferentes entre si.
-    private char[] getRandomAir(Air air) {
+    private NodoList<Air> getRandomAir(Air air) {
     	Air tmp1, tmp2 = null;
-    	String nodes = "";
+    	NodoList <Air> nodes = new NodoList<>();
     	while(true) {
     		tmp1 = randomAir(random);
     		tmp2 = randomAir(random);
     		if (tmp1!=air  &&  tmp2!=air  &&  tmp1!=tmp2);
-    			nodes = ""+tmp1.getid()+tmp2.getid();
+    			nodes.addLast(tmp1);
+    			nodes.addLast(tmp2);
     			break;
     	}
-    	return nodes.toCharArray();
+    	return nodes;
     }private Air randomAir(Random random) {
     	int r = random.nextInt(airList.getLargo()-1);
     	return airList.get(r);
     }
 
-//    //calcular distancia entre los nodos.
-//    private double getDistance(Vertice vertice1, Vertice vertice2) {
-//		//formula de distancia entre dos puntos de un plano y pitagoras.
-//		double distanciaEnX = Math.abs(vertice2.getZone().getPosx() - vertice1.getZone().getPosx());
-//		double distanciaEnY = Math.abs(vertice2.getZone().getPosy() - vertice1.getZone().getPosy());
-//		double hipotenusa = Math.sqrt(Math.pow(distanciaEnX, 2)+Math.pow(distanciaEnY, 2));
-////		System.out.println("Distancia en X > "+ distanciaEnX+ "Distancia en Y > "+ distanciaEnY);
-//		System.out.println("Hipotenusa > "+hipotenusa);
-//    	return hipotenusa;
-//    }
+    //calcular distancia entre los nodos.
+    private double getDistance(Air vertice1, Air vertice2) {
+		//formula de distancia entre dos puntos de un plano y pitagoras.
+		double distanciaEnX = Math.abs(vertice2.getPosx() - vertice1.getPosx());
+		double distanciaEnY = Math.abs(vertice2.getPosy() - vertice1.getPosy());
+		double hipotenusa = Math.sqrt(Math.pow(distanciaEnX, 2)+Math.pow(distanciaEnY, 2));
+//		System.out.println("Distancia en X > "+ distanciaEnX+ "Distancia en Y > "+ distanciaEnY);
+    	return hipotenusa;
+    }
     
     //ADD AVION
     public void addPlane(Plane plane) {
@@ -253,6 +314,6 @@ public class BackGround {
 
 
 
-    
-    
+
+
 }

@@ -5,6 +5,8 @@ import java.util.Random;
 
 import Interface.Controller;
 import Interface.Transition;
+import Listas.Nodo;
+import Listas.NodoList;
 import Others.BasicFunctions;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -22,7 +24,7 @@ public class Plane extends ImageView {
 		double posx, posy;
     	private Random random = new Random();
 		private int rangox,rangoy, onNode;
-		private char[] camino = null;
+		private NodoList<Character> camino = new NodoList<>();
 		private Tooltip tooltip = new Tooltip("loading... "+flyOutTime+"s");
     
 	/*Constructor*/
@@ -69,12 +71,12 @@ public class Plane extends ImageView {
 	}
 
 
-	public String print(char[] camino, char id) {
+	public String print(NodoList<Character> camino, char id) {
 		String str= "";
-		for (int i=0; i<camino.length; i++) {
+		for (int i=0; i<camino.getLargo(); i++) {
 			
-			str=str+" -> "+camino[i];
-			if (id == camino[i]) {
+			str=str+" -> "+camino.get(i);
+			if (id == camino.get(i)) {
 				str=str+"*";
 			}
 		}
@@ -126,7 +128,7 @@ public class Plane extends ImageView {
 		return posy+this.getTranslateY();
 	}
 
-	public char[] getCamino() {
+	public NodoList<Character> getCamino() {
 		return camino;
 	}
 	public Tooltip getTooltip() {
@@ -155,8 +157,8 @@ public class Plane extends ImageView {
 
 
 	public void setFlyOutTime() {
-	    this.flyOutTime = random.nextInt(TimeOut)+3;
-	    System.out.println(flyOutTime);
+	    this.flyOutTime = BasicFunctions.getRandomNum(4)+2;
+	    System.out.println("tiempo de salida= "+flyOutTime);
 	}
 
 
@@ -169,9 +171,15 @@ public class Plane extends ImageView {
 		this.img = avion;
 	}
 	public void setCamino(char[] cs) {
-		this.camino = cs;
+		NodoList<Character> ruta=new NodoList<>();
+		if (cs!=null) {
+			for (int i = 0; i < cs.length; i++) {
+				ruta.addLast(cs[i]);
+			}
+		}
+		this.camino = ruta;
 	}
-    public void setTooltipText(char[] arrayCamino, char id) {
+    public void setTooltipText(NodoList<Character> arrayCamino, char id) {
 		String str = "Plane "+getId() + " | "+ print(arrayCamino, id);
 		this.tooltip.setText(str);
 	}

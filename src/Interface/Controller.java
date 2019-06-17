@@ -1,9 +1,6 @@
 package Interface;
 
-import GameElements.Air;
-import GameElements.AirPort;
-import GameElements.Bala;
-import GameElements.Plane;
+import GameElements.*;
 import Listas.NodoList;
 import Loops.TimeAnimation;
 import Others.BasicFunctions;
@@ -20,6 +17,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -30,31 +28,32 @@ public class Controller {
 		//game interface elements
 	    @FXML private AnchorPane mapAnchorPane = new AnchorPane();
 	    @FXML private ImageView batteryImageView = new ImageView();
-	    @FXML private Rectangle r= new Rectangle();
 	    @FXML private ProgressBar powerProgressBar = new ProgressBar();
 	    @FXML private Text aliveText =  new Text(); 
 	    @FXML private Text  slayedText =  new Text(); 
 	    @FXML private Text  countText =  new Text(); 
 	    //game backgrounds elements
 	    public static BackGround background = new BackGround();
-	    public TimeAnimation schGen;
 	    private int count;
-	    private long timei,timef;
+	    private long timei,timef,timepeligroi,timepeligrof;
 	    private Boolean presionado=false;
 	    private NodoList<Bala> listabala= new NodoList<>();
-    
         private AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 try {
+					timepeligrof = System.currentTimeMillis()-timepeligroi;
                     int cont;
                     for (cont=0;cont<listabala.getLargo();cont++){
                         Bala bala=listabala.get(cont);
                         bala.setY(bala.getY()-bala.getVelocidad());
                         if (bala.getY()<-30){listabala.eliminar(bala);mapAnchorPane.getChildren().remove(bala);}
-                        //aqui tambien va ver si esta dentro del rango de un avion eliminar a ambos y subir la peligrosidad al camino
                     }
                     verificarchoque();
+                    if (timepeligrof>6000){
+                    	bajarpeligrosidad();
+                    	timepeligroi=System.currentTimeMillis();
+					}
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -70,7 +69,16 @@ public class Controller {
 				Bala bala=listabala.get(j);
 				if (Math.abs(bala.getPosx()-avion.getrealx())<32 && Math.abs(bala.getY()-avion.getrealy())<32){
 					try {
-						System.out.println("avion="+avion);
+						try {
+							char siguiente = avion.getCamino().get(avion.getOnNode());
+							char inicial = avion.getCurrentZone().getid();
+							System.out.println("muerto en"+inicial+","+siguiente);
+							if (inicial==siguiente){}
+							else {subirpeligrosidad(inicial,siguiente);
+							}
+						}catch (NullPointerException e){
+							System.out.println("no tengo ruta aun");
+						}
 						mapAnchorPane.getChildren().remove(bala);
 						aviones.eliminar(avion);
 						listabala.eliminar(bala);
@@ -84,7 +92,28 @@ public class Controller {
 			}
 		}
 	}
-    
+	private void subirpeligrosidad(char i ,char f){
+    	System.out.println("voy a subir la peligrosidad");
+		NodoList<Ruta> caminos =background.caminos;
+		for (int n=0; n<caminos.getLargo(); n++){
+			Ruta tmp=caminos.get(n);
+			if ((tmp.inicio==i && tmp.fin==f) || (tmp.inicio==f && tmp.fin==i)){
+				tmp.setPeligro(100);
+				background.cambiarpeso(i,f,tmp);
+			}
+		}
+
+
+	}
+    private void bajarpeligrosidad(){
+		System.out.println("voy a bajar la peligrosidad");
+    	NodoList<Ruta> caminos =background.caminos;
+    	for (int i=0; i<caminos.getLargo(); i++){
+    		Ruta camino =caminos.get(i);
+    		camino.bajarpeligro();
+    		background.cambiarpeso(camino.inicio,camino.fin,camino);
+		}
+	}
 	/*initializer*/ 
     public void initialize() throws InterruptedException {
     	setGraphics();
@@ -92,10 +121,18 @@ public class Controller {
     	TankEvent(); 
     	drawAir();
     	gentrTask();
+    	pintarlineas();
 //    	toDo();
 //    	toDo();
     	
-	} 
+	}
+	public void pintarlineas(){
+    	NodoList<Line> lineas=background.lineas;
+    	for (int i=0; i<lineas.getLargo(); i++){
+    		mapAnchorPane.getChildren().add(lineas.get(i));
+		}
+	}
+
     
     //music
     private void setMusic() {
@@ -144,6 +181,7 @@ public class Controller {
         batteryImageView.setFocusTraversable(true);
         batteryImageView.requestFocus();
         timer.start();
+		timepeligroi = System.currentTimeMillis();
     	batteryImageView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE){
                 if (!presionado) {
@@ -194,8 +232,8 @@ public class Controller {
     
     //generate loop
     private void gentrTask() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), generate -> {
-            if (Controller.background.getAlive() == 8) {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(6), generate -> {
+            if (Controller.background.getAlive() == 1) {
             	System.out.println("MAXIMO DE AVIONES EN PANTALLA (8)"); 
             	countText.setText(0+" s");
             	return;}
@@ -212,7 +250,7 @@ public class Controller {
     private void countdownTask() {
     	this.count=2;
     	Timeline cd = new Timeline(new KeyFrame(Duration.seconds(1), write -> {
-            if (Controller.background.getAlive() == 8) {
+            if (Controller.background.getAlive() == 1) {
             	countText.setText(0+" s");
             	return;}
     		countText.setText(count+" s");

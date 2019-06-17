@@ -1,5 +1,6 @@
 package GameElements;
 
+
 public class Ruta {
     public char inicio, fin;
     public double distancia,peligro,peso, pesoair;
@@ -15,8 +16,14 @@ public class Ruta {
     }
 
     public void bajarpeligro (){
-        peligro-=10;
-        peso-=10;
+        if (peligro<10){
+            peso-=peligro;
+            peligro=0;
+        }
+        else {
+            peligro -= 10;
+            peso -= 10;
+        }
     }
     private void sumartipoair(Boolean esairport){
         if (esairport){pesoair+=50;}
@@ -55,12 +62,12 @@ public class Ruta {
     public void setPeso(double peso) {
         this.peso = peso;
     }
-    
-    
-	@Override
-	public String toString() {
-		String str = distancia+":{"+inicio+"~"+fin+"}";
-		return str;
-		
-	}
+
+
+    @Override
+    public String toString() {
+        String str = distancia+":{"+inicio+"~"+fin+"}";
+        return str;
+
+    }
 }

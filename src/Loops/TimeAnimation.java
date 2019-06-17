@@ -27,7 +27,6 @@ public class TimeAnimation {
     	Timeline timer = new Timeline(new KeyFrame(Duration.seconds(flyOutTime),
 				write -> {
 					toDo();
-					
 		}));
 	timer.setCycleCount(-1);
 	timer.play();
@@ -35,7 +34,7 @@ public class TimeAnimation {
 	
 	
 	public void toDo(){
-		if (plane.getCamino()==null)
+		if (plane.getCamino().getLargo()==0)
 			newRoute();
 		else { 
 			if(plane.getTransitionDone())
@@ -46,8 +45,9 @@ public class TimeAnimation {
 	private void newRoute() {
 		Air zone = Controller.background.searchAir(plane.getCurrentZone());
 		if (zone == null) return;
-		if(plane.getTransitionDone());
+		if(plane.getTransitionDone() && plane.getCamino().getLargo()==0);
 			newRoute(Controller.background.getGraph().encontrarRutaMinimaDijkstra(plane.getCurrentZone().getid(), zone.getid()));
+			System.out.println(plane.toString()+" en "+plane.getCurrentZone() +" va a:"+Controller.background.getGraph().encontrarRutaMinimaDijkstra(plane.getCurrentZone().getid(), zone.getid()));
 	}
 	private void newRoute(String camino) {
 		if (camino == null) {
@@ -55,29 +55,40 @@ public class TimeAnimation {
 		}
 		camino = camino.replaceAll(",", "");
 		char[] arrayCamino = camino.split(":")[1].toCharArray();
+		if (camino.split(":")[0].equals("0")){newRoute(); return;}
 		plane.setCamino(arrayCamino);
-		plane.setTooltipText(arrayCamino, arrayCamino[0]);
+		NodoList<Character> ruta=new NodoList<>();
+		for(int i =0; i<arrayCamino.length;i++){
+			ruta.addLast(arrayCamino[i]);
+		}
+		plane.setTooltipText(ruta, arrayCamino[0]);
 //		Air next = getAir(plane.getCamino(), 0);
 //		if (next == null) {
 //			toDo(); return;
 //		}
-		plane.setTransition(plane.getCurrentZone(), bg.getChar(zonesList, arrayCamino[0]));
+		System.out.println(camino);
+		System.out.println("voy a "+bg.getChar(zonesList, arrayCamino[1]));
+		plane.setTransition(plane.getCurrentZone(), bg.getChar(zonesList, arrayCamino[1]));
 		plane.setOnNode(1);	
 	}
 	
 	private void nextDestiny() {
 		int current = plane.getOnNode();
-		System.out.println("Current "+current+" Size "+plane.getCamino().length);
-		if (current >= plane.getCamino().length-1) {
+		System.out.println("Current "+current+" Size "+plane.getCamino().getLargo());
+		if (current >= plane.getCamino().getLargo()-1 && plane.getCamino().get(current).equals(plane.getCurrentZone().getid())) {
 			plane.setCamino(null);
 			return;
 		}
-		plane.setTooltipText(plane.getCamino(), plane.getCamino()[current]);
+		System.out.println(plane.getCurrentZone().getid()+","+plane.getCamino().get(current));
+		if (plane.getCamino().get(current).equals(plane.getCurrentZone().getid())) {
+			System.out.println("voy a cambiar"+plane.toString()+"a la siguiente zona");
+			plane.setTooltipText(plane.getCamino(), plane.getCamino().get(current));
 //		Air next = getAir(plane.getCamino(), current);
 //		if (next == null) {
 //			toDo(); return;
 //		}
-		plane.setTransition(plane.getCurrentZone(), bg.getChar(zonesList, plane.getCamino()[current]));
-		plane.setOnNode(current+1);
+			plane.setTransition(plane.getCurrentZone(), bg.getChar(zonesList, plane.getCamino().get(current+1)));
+			plane.setOnNode(current + 1);
+		}
 	}
 }

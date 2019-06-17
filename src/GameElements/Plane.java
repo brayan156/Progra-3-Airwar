@@ -5,9 +5,6 @@ import java.util.Random;
 
 import Interface.Controller;
 import Interface.Transition;
-import Listas.Nodolista;
-import Listas.NodoList;
-import Listas.Vertice;
 import Others.BasicFunctions;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -16,17 +13,17 @@ import javafx.scene.layout.AnchorPane;
 
 public class Plane extends ImageView {
 		private static final int TimeOut = BasicFunctions.ParseInt(BasicFunctions.getPropertyKey("flyOutTime"));
-		private Random random = new Random();
+		private Air air = null;
+		private boolean Alive = true;
 		private boolean done = true;
-		private NodoList<Vertice> ruta = null;
-		double posx, posy;
 		private long flyOutTime=0;
 		private String img,url;
-		private boolean Alive = true;
-    	private Transition planeTransition = new Transition(this);
-		private Air air = null;
-		private Tooltip tooltip = new Tooltip("loading...");
-		private int rangox,rangoy, vertice;
+		private Transition planeTransition = new Transition(this);
+		double posx, posy;
+    	private Random random = new Random();
+		private int rangox,rangoy, onNode;
+		private char[] camino = null;
+		private Tooltip tooltip = new Tooltip("loading... "+flyOutTime+"s");
     
 	/*Constructor*/
     public Plane(double x, double y) {
@@ -46,25 +43,13 @@ public class Plane extends ImageView {
     }
     
 	
-    private void installTooltip() {
-      Tooltip.install(this, this.tooltip);
-    }
-  
     //crear imagen
     public void createimg(){
     	Image img = new Image(url, rangox,rangoy, true, true);
         this.setImage(img);
     }
-    
-    public boolean isAlive() {
-		return Alive;
-	}
-
-	public void setAlive(boolean alive) {
-		Alive = alive;
-	}
-
-	//dibujo avion
+  
+    //dibujo avion
     public void draw( ) {
     	createimg();
     	try {Controller.background.getAnchorPane().getChildren().add(this);}
@@ -73,89 +58,122 @@ public class Plane extends ImageView {
     		i.printStackTrace();
     	}
     }
-	public void slaye(AnchorPane anchorPane) throws InterruptedException {
-//        this.setImage(new Image("file:src/Media/explosion.PNG"));
-		anchorPane.getChildren().remove(this);
-		Alive = false;
-	}
-	
-	public void print() {
-	System.out.println(toString());
-	}
-	
-	@Override
-	public String toString() {
-		String str = "[PLANE "+getId()+"] ("+posx+","+posy+")"+"(img:"+img+")";
-		return str;
-	}
-	
     
-    /*Getters*/
-    public double getPosx() {
-		return posx;
+    private void installTooltip() {
+	  Tooltip.install(this, this.tooltip);
 	}
 
-	public double getPosy() {
-		return posy;
-	}
-	public double getrealx() {
-		return posx+this.getTranslateX();
+
+	public boolean isAlive() {
+		return Alive;
 	}
 
-	public double getrealy() {
-		return posy+this.getTranslateY();
+
+	public String print(char[] camino, char id) {
+		String str= "";
+		for (int i=0; i<camino.length; i++) {
+			
+			str=str+" -> "+camino[i];
+			if (id == camino[i]) {
+				str=str+"*";
+			}
+		}
+//		System.out.println("CAMINO: "+str.substring(4));
+
+		return str.substring(4);
 	}
 
+
+	public void slaye(AnchorPane anchorPane) throws InterruptedException {
+	//        this.setImage(new Image("file:src/Media/explosion.PNG"));
+			anchorPane.getChildren().remove(this);
+			Alive = false;
+		}
+
+
+	/*Getters*/
+	public Air getCurrentZone() {
+		return air;
+	}
 
 	public long getFlyOutTime() {
 		return flyOutTime;
 	}
 
-	public String getUrl() {
-		return url;
+	public int getOnNode() {
+		return onNode;
 	}
-	
+
+
 	public String getPlane() {
 		return img;
+	}
+
+    public double getPosx() {
+		return posx;
+	}
+	
+	public double getPosy() {
+		return posy;
+	}
+	
+	public double getrealx() {
+		return posx+this.getTranslateX();
+	}
+	
+    
+    public double getrealy() {
+		return posy+this.getTranslateY();
+	}
+
+	public char[] getCamino() {
+		return camino;
 	}
 	public Tooltip getTooltip() {
 		return tooltip;
 	}
-	public Air getCurrentZone() {
-		return air;
-	}
+
 	public boolean getTransitionDone() {
 		return done;
 	}
 
 
-	public NodoList<Vertice> getRuta() {
-		return ruta;
-	}
-
-
-	public int getVertice() {
-		return vertice;
-	}
-
-
+	public String getUrl() {
+		return url;
+	}	
+	
+	
 	/*Setters*/
-	public void setXY(double X, double Y) {
-		this.posx = X;
-		this.posy = Y;
-		this.setX(X);
-		this.setY(Y);
+	public void setAlive(boolean alive) {
+		Alive = alive;
 	}
+
+
+	public void setCurrentZone(Air air) {
+		this.air = air;
+	}
+
+
 	public void setFlyOutTime() {
-//	    this.flyOutTime = random.nextInt(TimeOut - Controller.background.getRisk()*5)+2;
-	    this.flyOutTime = random.nextInt(5)+2;
-//	    System.out.println(flyOutTime);
+	    this.flyOutTime = random.nextInt(TimeOut)+3;
+	    System.out.println(flyOutTime);
 	}
-    public void setPlane(String avion) {
+
+
+	public void setOnNode(int onNode) {
+		this.onNode = onNode;
+	}
+
+
+	public void setPlane(String avion) {
 		this.img = avion;
 	}
-	public void setUrl(String url) {
-		this.url = url;
+	public void setCamino(char[] cs) {
+		this.camino = cs;
+	}
+    public void setTooltipText(char[] arrayCamino, char id) {
+		String str = "Plane "+getId() + " | "+ print(arrayCamino, id);
+		this.tooltip.setText(str);
 	}
 	public void setTransition(Air prevZone, Air nextZone) {
 		if (prevZone == null || nextZone == null) return;
@@ -183,42 +201,25 @@ public class Plane extends ImageView {
 			done=true;
 		});
 	}
-	public void setCurrentZone(Air air) {
-		this.air = air;
+	public void setUrl(String url) {
+		this.url = url;
 	}
-	public void setTooltip(Tooltip tooltip) {
-		this.tooltip = tooltip;
+
+	public void setXY(double X, double Y) {
+		this.posx = X;
+		this.posy = Y;
+		this.setX(X);
+		this.setY(Y);
 	}
-	public void setTooltipText(NodoList<Vertice> ruta, String id) {
-		String zones = setTooltipText(id);
-		String str = "Plane "+getId() + " | "+ zones;
-		this.tooltip.setText(str);
-	}
-	private String setTooltipText(String id) {
-		Nodolista<Vertice> tmp = ruta.getHead();
-		String str = "";
-		while(tmp!=null) {
-			String zone = tmp.getNodo().getZone().getId();
-			
-			if(str.equals("")) {
-				if (id!=null && id==zone) {str = zone+"** ";}
-				else {str = zone;}
-			}else {
-				if (id!=null && id==zone) {str = str + " -> "+ zone+"**";}
-				else {str = zone;}
-			}tmp = tmp.getNext();
-		}return str;
-	}
+
+
 	
-	public void setRuta(NodoList<Vertice> ruta) {
-		this.ruta = ruta;
+	
+	
+	@Override
+	public String toString() {
+		String str = "[PLANE "+getId()+"] ("+posx+","+posy+")"+"(img:"+img+")";
+		return str;
 	}
-
-
-	public void setVertice(int vertice) {
-		this.vertice = vertice;
-	}
-
-
 
 }

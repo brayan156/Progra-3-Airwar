@@ -10,6 +10,7 @@ import GameElements.AirPort;
 import GameElements.Plane;
 import Listas.Grafo;
 import Listas.NodoList;
+import Listas.Nodolista;
 import Others.BasicFunctions;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -24,7 +25,7 @@ public class BackGround {
 		/*Atributes*/
     	private Random random = new Random();
 
-		private int alive=0, slayed=0, risk=0;
+		private int alive=0, slayed=0;
 	    private NodoList<Air> airList = new NodoList<>();
 	    private NodoList<AirPort> airportsList = new NodoList<>();
 	    private NodoList<Plane> planesList = new NodoList<>();
@@ -49,13 +50,14 @@ public class BackGround {
 	//GENERAR AIRZONES
     private void setTerritory() {
 		//posiciones random...
-		double x  = BasicFunctions.getRandomNum(900)+50;
-		double y  = BasicFunctions.getRandomNum(700)+50;
+
 		
 		//string del grafo
     	String serieNodos = "";
 		//iteracion para generar puertos
     	for(int i=0; i<21; i++) {
+    		double x  = BasicFunctions.getRandomNum(900)+50;
+    		double y  = BasicFunctions.getRandomNum(700)+50;
     		if (i%2==0) {
     			/*logica de 
     			 * para 
@@ -136,7 +138,7 @@ public class BackGround {
 	}
     
     //SEARCH AIR
-    public Air search(Air current) {
+    public Air searchAir(Air current) {
     	Air next = null;
     	while(true) {
     		next = randomAir(random);
@@ -174,10 +176,6 @@ public class BackGround {
 		return graph;
 	}
 	
-	public int getRisk() {
-		return risk;
-	}
-	
 	//lists
 	public NodoList<AirPort> getAirports() {
 		return airportsList;
@@ -211,17 +209,21 @@ public class BackGround {
 		int TankSpeed = BasicFunctions.getRandomNum(10);
 		return TankSpeed;
 	}
-
-	
+	public Air getChar(NodoList<Air> zones, char c) {
+    	Nodolista<Air> tmp = airList.getHead();
+    	while(tmp!=null) {
+    		if (c == tmp.getNodo().getid())
+    			return tmp.getNodo();
+    		tmp=tmp.next;
+    	}
+		return null;
+	}
 	
 	
 	/*Setters*/
-	public void setRisk(int risk) {
-		this.risk = risk;
-	}
 	public void setCurrent(Air zone, Plane plane) {
 		for (int i =0; i<airList.getLargo(); i++) {
-			if (airList.get(i).getId().equals(zone.getId())) {
+			if (zone.getid() == airList.get(i).getid()) {
 				airList.get(i).setPlane(plane);
 				return;}}
 	}

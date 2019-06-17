@@ -3,9 +3,9 @@ package Loops;
 
 import GameElements.Air;
 import GameElements.Plane;
+import Interface.BackGround;
 import Interface.Controller;
 import Listas.NodoList;
-import Listas.Vertice;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -13,7 +13,9 @@ import javafx.util.Duration;
 public class TimeAnimation {
 		private Plane plane;
 		private long flyOutTime;
-	
+		private static BackGround bg = Controller.background;
+		private static NodoList<Air> zonesList = bg.getZones();
+		
 	public TimeAnimation(Plane plane) {
 		this.flyOutTime = plane.getFlyOutTime();
 		this.plane = plane;
@@ -33,47 +35,49 @@ public class TimeAnimation {
 	
 	
 	public void toDo(){
-		if (plane.getRuta()==null) {
+		if (plane.getCamino()==null)
 			newRoute();
-		}else {
-			nextVertice();
+		else { 
+			if(plane.getTransitionDone())
+				nextDestiny();
 		}
 	}
 		
 	private void newRoute() {
-		Air zone = Controller.background.search();
-		if (zone == null) {
-			System.out.println("[ Puerto es null ] : Line35-Controller"); 
-		}else if (zone.equals(plane.getCurrentZone())) {
-			toDo();
-		}else {
-			if(plane.getTransitionDone()) {
-				NodoList<Vertice> ruta = Controller.background.getGraph().hastPathDFS(plane.getCurrentZone().getId(), zone.getId());
-				if (ruta==null) {
-					System.out.println("NO HAY RUTA DE "+plane.getCurrentZone()+", "+zone);
-					toDo();
-					return;
-				}
-				plane.setRuta(ruta);
-//				plane.setTooltipText(ruta, plane.getRuta().get(0).getZone().getId());
-				plane.setTransition(plane.getCurrentZone(), plane.getRuta().get(0).getZone());
-				plane.setVertice(1);			
-			}
+		Air zone = Controller.background.searchAir(plane.getCurrentZone());
+		if (zone == null) return;
+		if(plane.getTransitionDone());
+			newRoute(Controller.background.getGraph().encontrarRutaMinimaDijkstra(plane.getCurrentZone().getid(), zone.getid()));
+	}
+	private void newRoute(String camino) {
+		if (camino == null) {
+			toDo(); return;
 		}
+		camino = camino.replaceAll(",", "");
+		char[] arrayCamino = camino.split(":")[1].toCharArray();
+		plane.setCamino(arrayCamino);
+		plane.setTooltipText(arrayCamino, arrayCamino[0]);
+//		Air next = getAir(plane.getCamino(), 0);
+//		if (next == null) {
+//			toDo(); return;
+//		}
+		plane.setTransition(plane.getCurrentZone(), bg.getChar(zonesList, arrayCamino[0]));
+		plane.setOnNode(1);	
 	}
 	
-	private void nextVertice() {
-		if(plane.getTransitionDone()) {
-			int current = plane.getVertice();
-			System.out.println("Current "+current+" tam "+plane.getRuta().getLargo());
-			if (current == plane.getRuta().getLargo()-1) {
-				plane.setRuta(null);
-				return;
-			}
-//			plane.setTooltipText(plane.getRuta(), plane.getRuta().get(current).getZone().getId());
-			plane.setTransition(plane.getRuta().get(current).getZone(), plane.getRuta().get(current+1).getZone());
-			plane.setVertice(current+1);
+	private void nextDestiny() {
+		int current = plane.getOnNode();
+		System.out.println("Current "+current+" Size "+plane.getCamino().length);
+		if (current >= plane.getCamino().length-1) {
+			plane.setCamino(null);
+			return;
 		}
+		plane.setTooltipText(plane.getCamino(), plane.getCamino()[current]);
+//		Air next = getAir(plane.getCamino(), current);
+//		if (next == null) {
+//			toDo(); return;
+//		}
+		plane.setTransition(plane.getCurrentZone(), bg.getChar(zonesList, plane.getCamino()[current]));
+		plane.setOnNode(current+1);
 	}
-	
 }

@@ -39,7 +39,7 @@ public class Grafo {
         Nodo tmp = new Nodo(fin);
         if(!listos.contains(tmp)) {
             System.out.println("Error, nodo no alcanzable");
-            return "Bye";
+            return null;
         }
         tmp = listos.get(listos.indexOf(tmp));
         int distancia = tmp.distancia;
@@ -154,7 +154,7 @@ public class Grafo {
         g.agregarRuta('d','f', 4);
         g.agregarRuta('e','f', 4);
         char inicio = 'a';
-        char fin    = 'c';
+        char fin    = '3';
         String respuesta = g.encontrarRutaMinimaDijkstra(inicio, fin);
         System.out.println(respuesta);
     }

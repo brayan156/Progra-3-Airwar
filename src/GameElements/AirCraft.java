@@ -4,8 +4,8 @@ public class AirCraft extends Air {
 	/*Atributes*/	
 	
 	/*Constructor*/
-	public AirCraft(double x, double y) {
-	   super(x, y);
+	public AirCraft(double x, double y, char id) {
+	   super(x, y, id);
 	}
 	
     public void print() {
@@ -14,7 +14,7 @@ public class AirCraft extends Air {
     
 	@Override
 	public String toString() {
-		String str = "[Craft : "+getId()+"] ("+posx+","+posy+")";
+		String str = "[Craft : "+getid()+"] ("+posx+","+posy+")";
 		return str;
 	}
 	

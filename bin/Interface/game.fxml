@@ -12,13 +12,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="860.0" prefWidth="1125.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interface.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="860.0" prefWidth="1125.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interface.Controller">
    <children>
       <AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="860.0" prefWidth="1000.0" style="-fx-background-color: #0f0f0f;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="800.0" fitWidth="1000.0" pickOnBounds="true">
                <image>
-                  <Image url="@../Media/map2.jpg" />
+                  <Image url="@../Media/mapa.png" />
                </image>
             </ImageView>
             <ImageView fx:id="batteryImageView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" y="800.0" AnchorPane.bottomAnchor="0.0">

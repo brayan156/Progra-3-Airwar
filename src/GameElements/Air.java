@@ -7,15 +7,13 @@ public class Air extends ImageView {
 	protected double posx;
 	protected double posy;
 	protected Plane plane=null;
-	protected int id;
-	private static int idCounter=0;
+	protected char id;
 	
 	/*Constructor*/
-	public Air(double x, double y) {
+	public Air(double x, double y, char id) {
 		this.posx = x;
 		this.posy = y;
-		idCounter+=1;
-		this.setId(String.valueOf(idCounter));	
+		this.id = id;	
 	}
 	
 	public void receivePlane(Plane plane) {
@@ -71,6 +69,14 @@ public class Air extends ImageView {
 	}
 	public void setPlanesZone() {
 		this.plane.setCurrentZone(this);
+	}
+
+	public char getid() {
+		return id;
+	}
+
+	public void setid(char id) {
+		this.id = id;
 	}
 	
 }

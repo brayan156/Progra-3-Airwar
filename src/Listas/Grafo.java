@@ -10,7 +10,7 @@ public class Grafo {
     List<Nodo> listos=null;                        // nodos revisados Dijkstra
 
     // construye el grafo con la serie de identificadores de nodo en una cadena
-    Grafo(String serieNodos) {
+    public Grafo(String serieNodos) {
         nodos = serieNodos.toCharArray();
         grafo = new int[nodos.length][nodos.length];
     }
@@ -154,7 +154,7 @@ public class Grafo {
         g.agregarRuta('d','f', 4);
         g.agregarRuta('e','f', 4);
         char inicio = 'a';
-        char fin    = 'f';
+        char fin    = 'c';
         String respuesta = g.encontrarRutaMinimaDijkstra(inicio, fin);
         System.out.println(respuesta);
     }
